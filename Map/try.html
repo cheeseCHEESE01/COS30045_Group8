@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple OnClick Zoom</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style>
+  svg {
+    border: 1px solid #ccc;
+  }
+</style>
+</head>
+<body>
+
+<svg width="400" height="400"></svg>
+
+<script>
+  let svg = d3.select("svg");
+
+  // Define the initial scale and translate
+  let initialTransform = d3.zoomIdentity.scale(1);
+
+  // Define zoom behavior
+  let zoom = d3.zoom()
+    .scaleExtent([1, 5])  // Set the minimum and maximum zoom levels
+    .on("zoom", zoomed);
+
+  // Attach zoom behavior to the svg
+  svg.call(zoom).call(zoom.transform, initialTransform);
+
+  // Create a rectangle to zoom into
+  svg.append("rect")
+    .attr("width", 200)
+    .attr("height", 200)
+    .attr("fill", "lightblue")
+    .on("click", zoomIn);
+
+  function zoomed() {
+    // Apply the zoom transformation to the svg elements
+    svg.attr("transform", d3.event.transform);
+  }
+
+  function zoomIn() {
+    // Define the new scale and translate values for zooming in
+    let newScale = 2;
+    let x = -50;  // Adjust as needed
+    let y = -50;  // Adjust as needed
+
+    // Apply the zoom transformation
+    svg.transition()
+      .duration(750)
+      .call(zoom.transform, d3.zoomIdentity.translate(x, y).scale(newScale));
+  }
+</script>
+
+</body>
+</html>
