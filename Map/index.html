@@ -10,14 +10,21 @@
 div.tooltip {	
     position: absolute;			
     text-align: center;			
-    width: 140px;					
-    height: 50px;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: lightblue;	
+    width: 150px;					
+    height: 70px;					
+    padding: 2px;
+    font: 14px sans-serif;						
+    background: #FFBF00;	
     border: 0px;			
     pointer-events: none;			
 }
+
+svg {
+    border: 2px solid green;
+    margin-left: 50px;
+    margin-top: 20px;
+  }
+
 
 </style>
 </head>
@@ -25,23 +32,26 @@ div.tooltip {
   <div id = "postContents"; style="text-align:center;"> 
   
   <script>
-    let margin = {top: 10, right: 20, bottom: 10, left: 450};
-    let width = 1200 - margin.left - margin.right;
-    let height = 700 - margin.top - margin.bottom;
+    //let margin = {top: 10, right: 20, bottom: 10, left: 450};
+    let margin = {top: 0, right: 0, bottom: 0, left: 0};
+
+    let width = 1700 - margin.left - margin.right;
+    let height = 800 - margin.top - margin.bottom;
     
     let svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-        .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+      //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(0,0)");
+
           
     // map background
     svg.append("rect")
       .attr("width",width)
       .attr("height",height)
       .style("fill","green")
-      .style("opacity", 1); //Background best practice
+      .style("opacity", 0); //Background best practice
         
     let div = d3.select("body").append("div")	
       .attr("class", "tooltip")				
@@ -65,6 +75,7 @@ div.tooltip {
         .enter()
         .append('path')
           .attr('d', pathGenerator)
+          .attr("transform", "translate(500,50)")
           .style("fill", function(d) {
             if(d.State == "Kerala") {
               return "red";
@@ -76,11 +87,15 @@ div.tooltip {
           // the detail box show
           .on("mouseover", function(d) {
             div.style("opacity", .9);		
-            div.html(d.State + "</br>" 
+            div.html("<b><span class='state-text'>" + d.State + "</span></b><br><br>" 
             + d.Unemployment_Percentage_in_2022 + "%")
             
             .style("left", (d3.event.pageX) + "px")		
             .style("top", (d3.event.pageY - 28) + "px");
+            
+            d3.select(".state-text")
+            .style("font-size", "16px");
+
           })					
           .on("mouseout", function(d) {		
             div.style("opacity", 0);	
@@ -123,10 +138,11 @@ div.tooltip {
                                   
     }) //End of Promise
 
+    
     const zoom = d3.zoom()
             .scaleExtent([1, 5])
             .on("zoom", () => {
-                svg.attr("transform", d3.event.transform);
+              svg.selectAll('g').attr('transform', d3.event.transform);
             });
 
         svg.call(zoom);
