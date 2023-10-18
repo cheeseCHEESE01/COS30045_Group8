@@ -40,17 +40,48 @@ div.tooltip {
 }
 
 .legend {
-  transform: translate(100px,50px);
+  transform: translate(100px, 30px);
 }
 
 .blegend {
-  transform: translate(100px,100px);
+  transform: translate(100px, 70px);
 }
 
 .filtered {
     fill-opacity: 1 !important;
-  }
+}
 
+#filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0; 
+}
+
+.btn {
+  margin: 0 2px;
+  padding: 10px 30px;
+}
+
+#maptext {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#maptext.active {
+  background-color: #FFBF00;
+  border-radius: 10px;
+  padding: 10px 30px;
+}
+
+
+.selectState {
+  margin: 0 0 10px 0;
+}
+
+tr, td {
+  text-align: left;
+}
 
 </style>
 </head>
@@ -60,9 +91,21 @@ div.tooltip {
   <div id="map"></div>
   <div id="right-clmn">
     <div id="inner"></div>
+    <div class="selectState">You are selected :
+      <div id="maptext"></div>
+    </div>
     <label for="percentageToCheck">Filter by Percentage:</label>
     <input type="number" id="percentageToCheck" placeholder="Enter Percentage">
-    <button onclick="applyFilter()">Filter Data</button>
+    <button onclick="applyFilter()" class="searchb">Filter Data</button>
+
+    <div id="filter-buttons">
+    <button onclick="applyFilter(0, 10)" class="btn">0-10%</button>
+    <button onclick="applyFilter(11, 20)" class="btn">11-20%</button>
+    <button onclick="applyFilter(21, 40)" class="btn">21 above</button>
+    <button onclick="resetFilter()">Reset</button>
+
+</div>
+
   
     <div id="filteredData"></div>
   </div>
@@ -153,11 +196,14 @@ div.tooltip {
           const textContent = `${d.State}: ${d.Unemployment_Percentage_in_2022}%`;
           const [x2, y2] = projection(d3.geoCentroid(d));
 
+          
+          d3.select("#maptext").html(textContent); 
+          
           svg.append("text")
             .attr("x", x2)
             .attr("y", y2)
             .text(textContent)
-            .attr("transform", "translate(200,50)")
+            .attr("transform", "translate(-200,50)")
             .attr('class', 'dynamic-text');
 
           d3.select(this).classed("active-state", true);
@@ -205,6 +251,14 @@ div.tooltip {
       console.log("Bout to go off");
 
       /**************************************************/
+      // add the active for map 
+      
+      document.getElementById("map").addEventListener("click", function() {
+      document.getElementById("maptext").classList.add("active");
+      });
+
+
+      /**************************************************/
       
       let colorScale = d3.scaleLinear()
         .domain([0, 5])
@@ -249,7 +303,7 @@ div.tooltip {
         .range(['#FFFFFF', '#E9967A']);
 
     let width2 = 380;
-    let height2 = 200;
+    let height2 = 110;
     let svg2 = d3.select("#inner").append("svg")
       .attr("width", width2 + margin.left + margin.right)
       .attr("height", height2 + margin.top + margin.bottom)
@@ -322,38 +376,63 @@ div.tooltip {
       /**************************************/
       // filter button
 
-      function applyFilter() {
-  d3.csv("unemployment.csv").then(function(data) {
-    let filterValue = parseFloat(document.getElementById("percentageToCheck").value);
+      function applyFilter(minRange, maxRange) {
+      d3.csv("unemployment.csv").then(function(data) {
+        let filteredData;
 
-    let filteredData = data.filter(function(d) {
-      return parseFloat(d.Unemployment_Percentage_in_2022) > filterValue;
-    });
-
-    let tableHTML = "<table><tr><th>State</th><th>Unemployment Percentage</th></tr>";
-    filteredData.forEach(function(d) {
-      tableHTML += "<tr><td>" + d.State + "</td><td>" + d.Unemployment_Percentage_in_2022 + "%</td></tr>";
-    });
-    tableHTML += "</table>";
-
-    document.getElementById("filteredData").innerHTML = tableHTML;
-
-    // Update map fill based on the filtered data
-    india.selectAll('path')
-      .data(geoJsonData.features)
-      .style("fill", function(d) {
-        let stateName = d.properties.name;
-        let stateData = filteredData.find(item => item.State === stateName);
-
-        if (stateData) {
-          let Unemployment_Percentage_in_2022 = stateData.Unemployment_Percentage_in_2022;
-          return colorScale(Unemployment_Percentage_in_2022);
+        if (minRange !== undefined && maxRange !== undefined) {
+            // Filter by range
+            filteredData = data.filter(function(d) {
+                let unemploymentPercentage = parseFloat(d.Unemployment_Percentage_in_2022);
+                return unemploymentPercentage >= minRange && unemploymentPercentage <= maxRange;
+            });
         } else {
-          return "back"; // Change this to your default color
+            // Filter by input value
+            let filterValue = parseFloat(document.getElementById("percentageToCheck").value);
+            filteredData = data.filter(function(d) {
+                return parseFloat(d.Unemployment_Percentage_in_2022) > filterValue;
+            });
         }
-      });
-  });
+
+        let colorScale = d3.scaleLinear()
+        .domain([0, 5])
+        .range(['#FFFFFF', '#E9967A']);
+
+        // Update map colors
+        d3.selectAll('path')
+            .style("fill", function(d) {
+                let stateData = filteredData.find(entry => entry.State === d.State);
+                if (stateData) {
+                    return colorScale(parseFloat(stateData.Unemployment_Percentage_in_2022));
+                } else {
+                    return "gray"; // Default color for states not in filtered data
+                }
+            });
+
+        // Update table
+        let tableHTML = "<table><tr><th>State</th><th>Unemployment Percentage</th></tr>";
+        filteredData.forEach(function(d) {
+            tableHTML += "<tr><td>" + d.State + "</td><td>" + d.Unemployment_Percentage_in_2022 + "%</td></tr>";
+        });
+        tableHTML += "</table>";
+
+        document.getElementById("filteredData").innerHTML = tableHTML;
+    });
 }
+
+    function resetFilter() {
+      d3.selectAll('path')
+        .classed('filtered', false)
+        .style("fill", function(d) {
+          return colorScale(d.Unemployment_Percentage_in_2022);
+        });
+
+        document.getElementById("filteredData").innerHTML = ""; // This line removes the content of the 'filteredData' div
+
+    }
+
+
+
 
 
 
