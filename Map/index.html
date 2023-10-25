@@ -1,16 +1,11 @@
 <html>
 <header>
-<title>Rice vs Roti</title>
+<title>Unemployement Rate in India State</title>
 </header>
 <head>
 <meta charset="utf-8">
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <style>
-
-body {
-  display: flex;
-  justify-content: center;
-}
 
 .active-state {
   fill: yellow !important; /* Override any other styles */
@@ -30,13 +25,17 @@ div.tooltip {
 }
 
 #map {
-    border: 2px solid green;
-    margin-top: 20px;
+  width: 70%;
+  border: 2px solid green;
+  margin-top: 20px;
+  float: left;
+
 }
 
 #right-clmn {
-  margin-left: auto;
-  margin-right: auto;
+  width: 29%;
+  float: left;
+  padding-left: 10px;
 }
 
 .legend {
@@ -59,7 +58,7 @@ div.tooltip {
 
 .btn {
   margin: 0 2px;
-  padding: 10px 30px;
+  padding: 10px 20px;
 }
 
 #maptext {
@@ -83,11 +82,41 @@ tr, td {
   text-align: left;
 }
 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 1.5px;
+}
+
+.Title {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.map-row {
+  width: 100%;
+}
+
 </style>
 </head>
 <body>
   <!-- Add buttons for filtering -->
 
+  <div class="Title">
+    <h1>Unemployement Rate in India State</h1>
+    <h2>Migrasion because of </h2>
+  </div>
+
+  <div class="map-row">
   <div id="map"></div>
   <div id="right-clmn">
     <div id="inner"></div>
@@ -101,15 +130,15 @@ tr, td {
     <div id="filter-buttons">
     <button onclick="applyFilter(0, 10)" class="btn">0-10%</button>
     <button onclick="applyFilter(11, 20)" class="btn">11-20%</button>
-    <button onclick="applyFilter(21, 40)" class="btn">21 above</button>
-    <button onclick="resetFilter()">Reset</button>
+    <button onclick="applyFilter(21, 40)" class="btn">21% above</button>
+    <button onclick="resetFilter()" class="btn">Reset</button>
 
 </div>
 
   
     <div id="filteredData"></div>
   </div>
-  
+</div>
 
   <script>
     //let margin = {top: 10, right: 20, bottom: 10, left: 450};
@@ -228,7 +257,7 @@ tr, td {
 
             // On mouseout, revert fill color to original
             d3.select(this)
-            .on("mouseout", function(d) {		
+          .on("mouseout", function(d) {		
             div.style("opacity", 0);
       
             d3.select(this)

@@ -1,0 +1,480 @@
+
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<html>
+<header>
+<title>Salary for different countries</title>
+</header>
+<head>
+<meta charset="utf-8">
+</head>
+<style>
+
+body {
+  background-color: #dedede;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  color: #231a1a;
+  border-width: 3px;
+}
+
+.top {
+  width: 100%;
+  height: 620px;
+}
+
+.LH {
+  width: 70%;
+  height: 100%;
+  float: left;
+}
+
+.RH {
+  width: 30%;
+  float: left;
+  height: 100%;
+}
+
+#legend {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.button-container {
+    clear: both; /* This will ensure that the buttons start on a new line */
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td, th {
+  border: 1px solid #111111;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #576978;
+  color: aliceblue;
+}
+
+.filterButton {
+  width: 150px;
+  height: 40px;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+#C-name {
+  width: 100%;
+  height: auto;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+</style>
+<body>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<div class="top">
+  <div class="LH">
+    <div id="my_dataviz"></div>
+  </div>
+
+  <div class="RH">
+    <div id="legend"></div>
+  </div>
+</div>
+
+<div class="button-container">
+  <button class="filterButton" data-country="Myanmar">Myanmar</button>
+  <button class="filterButton" data-country="India">India</button>
+  <button class="filterButton" data-country="Cyprus">Cyprus</button>
+  <button class="filterButton" data-country="Belgium">Belgium</button>
+  <button class="filterButton" data-country="Austria">Austria</button>
+  <button class="filterButton" data-country="Italy">Italy</button>
+  <button class="filterButton" data-country="Germany">Germany</button>
+
+  <div id="C-name"></div>
+  <div id="table_Country"></div>
+</div>
+
+
+
+<script>
+
+  // set the dimensions and margins of the graph
+  var margin = {top: 50, right: 100, bottom: 50, left: 50},
+    width = 1000 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+  
+  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+  
+  /**************************************/
+
+  // Build X scales and axis:
+  var x = d3.scaleBand()
+    .range([ 0, width ])
+    .padding(0.03);
+  
+  // Build X scales and axis:
+  var y = d3.scaleBand()
+    .range([ height, 0 ])
+    .padding(0.03);
+  
+  /**************************************/
+
+  // Build color scale
+  /*
+  var myColor = d3.scaleLog()
+    .range(["#1B4F72", "#28B463"])
+    .domain([1,1000])
+  */
+
+  //Read the data
+  d3.csv("salary.csv", function(data) {
+
+  /***************************************/
+  
+  // Ascending the year 
+
+  // Sort the data in descending order by year
+  data.sort(function(a, b) {
+    return d3.ascending(+a.year, +b.year);
+  });
+
+  // Calculate the minimum and maximum monthly_wages values
+  var minWages = d3.min(data, function(d) { return +d.monthly_wages; });
+  var maxWages = d3.max(data, function(d) { return +d.monthly_wages; });
+
+  /***************************************/
+
+  /*
+  var myColor = d3.scaleLinear()
+  .range(["#EBF4FA", "#D0EFFF"])
+  .domain([minWages, 0.100]);
+
+var myColor2 = d3.scaleLinear()
+  .range(["#ADD8E6", "#B0CFDE"])
+  .domain([0.101, 0.150]);
+
+var myColor3 = d3.scaleLinear()
+  .range(["#89CFF0", "#B0E0E6"])
+  .domain([0.151, 0.200]);
+
+var myColor4 = d3.scaleLinear()
+  .range(["#87CEEB", "#6495ED"])
+  .domain([0.2001, 1.000]);
+
+var myColor5 = d3.scaleLinear()
+  .range(["#1E90FF", "#3090C7"])
+  .domain([1.001, 4.000]);
+
+var myColor6 = d3.scaleLinear()
+  .range(["#368BC1", "#2554C7"])
+  .domain([4.001, 5.000]);
+
+var myColor7 = d3.scaleLinear()
+  .range(["#2554C7", "#1D4DAB"])
+  .domain([5.001, 7.000]);
+
+var myColor8 = d3.scaleLinear()
+  .range(["#155691", "#0D4F76"])
+  .domain([7.001, 8.000]);
+  
+var myColor9 = d3.scaleLinear()
+  .range(["#05475C", "#003E42"])
+  .domain([8.001, 10.000]);
+
+var myColor10 = d3.scaleLinear()
+  .range(["#003429", "#040720"])
+  .domain([10.001, maxWages]);
+
+
+  var Color = function(d) {
+  if (d >= minWages && d <= 0.100) {
+    return myColor(d);
+  } else if (d >= 0.101 && d <= 0.150) {
+    return myColor2(d);
+  } else if (d >= 0.151 && d <= 0.200) {
+    return myColor3(d);
+  } else if (d >= 0.2001 && d <= 1.000) {
+    return myColor4(d);
+  } else if (d >= 1.001 && d <= 4.000) {
+    return myColor5(d);
+  } else if (d >= 4.001 && d <= 5.000) {
+    return myColor6(d);
+  } else if (d >= 5.001 && d <= 7.000) {
+    return myColor7(d);
+  } else if (d >= 7.001 && d <= 8.000) {
+    return myColor8(d);
+  } else if (d >= 8.001 && d <= 10.000) {
+    return myColor9(d);
+  } else if (d >= 10.001 && d <= maxWages) {
+    return myColor10(d);
+  } 
+};
+*/
+
+var myColor = d3.scaleLinear()
+  .range(["#EBF4FA", "#D0EFFF"])
+  .domain([minWages, 10.000]);
+
+var myColor2 = d3.scaleLinear()
+  .range(["#BDEDFF", "#ADDFFF"])
+  .domain([10.001, 20.000]);
+
+var myColor3 = d3.scaleLinear()
+  .range(["#B0E0E6", "#89CFF0"])
+  .domain([20.001, 50.000]);
+
+var myColor4 = d3.scaleLinear()
+  .range(["#659EC7", "#368BC1"])
+  .domain([50.001, 700.000]);
+
+var myColor5 = d3.scaleLinear()
+  .range(["#4682B4", "#3090C7"])
+  .domain([700.001, 800.000]);
+
+var myColor6 = d3.scaleLinear()
+  .range(["#368BC1", "#2554C7"])
+  .domain([800.001, 1000.000]);
+
+var myColor7 = d3.scaleLinear()
+  .range(["#2554C7", "#1D4DAB"])
+  .domain([1000.001, 1200.000]);
+
+var myColor8 = d3.scaleLinear()
+  .range(["#155691", "#0D4F76"])
+  .domain([1200.001, 1400.000]);
+  
+var myColor9 = d3.scaleLinear()
+  .range(["#05475C", "#003E42"])
+  .domain([1400.001, 1700.000]);
+
+var myColor10 = d3.scaleLinear()
+  .range(["#003429", "#040720"])
+  .domain([1700.001, maxWages]);
+
+
+  var Color = function(d) {
+  if (d >= minWages && d <= 10.000) {
+    return myColor(d);
+  } else if (d > 10.000 && d <= 20.000) {
+    return myColor2(d);
+  } else if (d > 20.000 && d <= 50.000) {
+    return myColor3(d);
+  } else if (d > 50.000 && d <= 700.000) {
+    return myColor4(d);
+  } else if (d > 700.000 && d <= 800.000) {
+    return myColor5(d);
+  } else if (d > 800.000 && d <= 1000.000) {
+    return myColor6(d);
+  } else if (d > 1000.000 && d <= 1200.000) {
+    return myColor7(d);
+  } else if (d > 1200.000 && d <= 1400.000) {
+    return myColor8(d);
+  } else if (d > 1400.000 && d <= 1700.000) {
+    return myColor9(d);
+  } else if (d > 1700.000 && d <= maxWages) {
+    return myColor10(d);
+  } 
+
+};
+
+
+
+  /****************************************/
+
+  x.domain(data.map(function(d) { return d.country_name; }));
+  y.domain(data.map(function(d) { return d.year; }));
+
+  // create a tooltip
+  var tooltip = d3.select("#my_dataviz")
+    .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "#F5F5F5")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px");
+
+  // Three function that change the tooltip when user hover / move / leave a cell
+  var mouseover = function(d) {
+    tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+
+  var mousemove = function(d) {
+    tooltip
+      .html("<b><h3>" + d.country_name + 
+      "</h3></b><br> Country code: " + d.country_code + "<br>Year: " + d.year + 
+      "<br>Monly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hour_wages)
+      .style("left", (d3.mouse(this)[0]+70) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px");
+  }
+  var mouseleave = function(d) {
+    tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+
+  var activeBox = null; // Initialize active state variable
+
+  
+    // add the squares
+  svg.selectAll()
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", function(d) { return x(d.country_name) })
+    .attr("y", function(d) { return y(d.year) })
+    .attr("width", x.bandwidth() )
+    .attr("height", y.bandwidth() )
+    .style("fill", function(d) { return Color(d.monthly_wages);} )
+    .style("stroke-width", 4)
+    .style("stroke", "none")
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave);
+
+
+  // Add X axis
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .attr("font-size", "15px");
+
+    // Add Y axis
+  svg.append("g")
+    .call(d3.axisLeft(y))
+    .attr("font-size", "15px");
+
+/**********************************************************/
+
+// filter button
+d3.selectAll(".filterButton").on("click", function() {
+  var selectedCountry = d3.select(this).attr("data-country");
+  
+  // Filter data based on selectedCountry
+  var filteredData = data.filter(function(d) {
+    return d.country_name === selectedCountry;
+  });
+
+  d3.select("#C-name")
+    .text(selectedCountry);
+
+  // Update the heatmap with the filtered data
+  updateHeatmap(filteredData);
+
+  // Display monthly wages in a table
+  displayMonthlyWagesTable(filteredData);
+});
+
+function updateHeatmap(filteredData) {
+  // Code to update heatmap based on filteredData
+  // You may need to redraw the heatmap with the filtered data
+}
+
+function displayMonthlyWagesTable(filteredData) {
+  // Clear existing table
+  d3.select("#monthlyWagesTable").remove();
+
+  // Create a new table
+  var table = d3.select("#table_Country")
+    .append("table")
+    .attr("id", "monthlyWagesTable");
+  
+  // Create table headers
+  var headers = table.append("thead").append("tr");
+  headers.selectAll("th")
+    .data(["Year", "Monthly Wages"])
+    .enter().append("th")
+    .text(function(d) { return d; });
+  
+  // Create table rows
+  var rows = table.append("tbody")
+    .selectAll("tr")
+    .data(filteredData)
+    .enter().append("tr");
+  
+  // Populate table cells
+  rows.selectAll("td")
+    .data(function(d) { return [d.year, d.monthly_wages]; })
+    .enter().append("td")
+    .text(function(d) { return d; });
+}
+
+  
+  /**********************************************************/  
+  
+  // color legend 
+  var legendData = [
+  { label: '0 - 10.000', color: myColor(minWages) },
+  { label: '10.001 - 20.000', color: myColor2(10.001) },
+  { label: '20.001 - 50.000', color: myColor3(20.001) },
+  { label: '50.001 - 700.000', color: myColor4(50.001) },
+  { label: '700.001 - 800.000', color: myColor5(700.001) },
+  { label: '800.001 - 1000.000', color: myColor6(800.001) },
+  { label: '1000.001 - 1200.000', color: myColor7(1000.001) },
+  { label: '1200.001 - 14000.000', color: myColor8(1200.001) },
+  { label: '1400.001 - 1700.000', color: myColor9(1400.001) },
+  { label: '1700.001 - 2000.000', color: myColor10(1700.001) },
+  // Add more legend data as needed
+];
+
+var legendSvg = d3.select("#legend")
+  .append("svg")
+  .attr("class", "legend")
+  .attr("width", 200)
+  .attr("height", 200);
+
+var legend = legendSvg.selectAll('.legend')
+  .data(legendData)
+  .enter()
+  .append('g')
+  .attr('class', 'legend')
+  .attr('transform', function(d, i) {
+    return 'translate(0,' + (i * 20) + ')';
+  });
+
+legend.append('rect')
+  .attr('width', 30)
+  .attr('height', 30)
+  .style('fill', function(d) { return d.color; });
+
+legend.append('text')
+  .attr('x', 40)
+  .attr('y', 10)
+  .attr('dy', '.35em')
+  .text(function(d) { return d.label; });
+
+});
+  
+  </script>
+</body>
+</html>
