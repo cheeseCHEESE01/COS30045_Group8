@@ -1,15 +1,81 @@
 <!DOCTYPE html>
-
 <html>
-<head>
-    <title>Population in India by single age, region, subregion and contry, annually for 1950-2100 thousands.</title>
-    <script src='https://d3js.org/d3.v4.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <head>
+      <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/v8/js/anychart-sunburst.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
+      <script src="https://d3js.org/d3.v5.min.js"></script>
 
-
-</head>
-<body>
-    <script src="sunburst.js"></script>
-</body>
-</html>
+      <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+      <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+      <style type="text/css">
+    
+        html,
+        body,
+        #container {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      
+    </style>
+    </head>
+    <body>
+      
+      <div id="container"></div>
+      
+    
+      <script>
+    
+        anychart.onDocumentReady(function () {
+          // The data used in this sample can be obtained from the CDN
+          // https://cdn.anychart.com/samples/sunburst-charts/the-population-of-the-europe/data.json
+          anychart.data.loadJsonFile(
+            'https://cdn.anychart.com/samples/sunburst-charts/the-population-of-the-europe/data.json',
+            function (data) {
+              // makes tree from the data for the sample
+              var dataTree = anychart.data.tree(data, 'as-table');
+    
+              // create sunburst chart
+              var chart = anychart.sunburst(dataTree);
+    
+              // set calculation mode
+              chart.calculationMode('parent-independent');
+    
+              // set chart title
+              chart.title('Population In India');
+    
+              // set custom palette
+              chart.palette(['#0288d1', '#d4e157', '#ff6e40', '#f8bbd0']);
+    
+              // format chart labels
+              chart
+                .labels()
+                .format('{%Name}\n{%Value}{scale:(1000000)(1)|( mln)}');
+    
+              // format chart tooltip
+              chart
+                .tooltip()
+                .format('Population: {%Value}{scale:(1000000)(1)|( mln)}');
+    
+              // the fill specified in the data has priority
+              // set point fill
+              chart.fill(function () {
+                return anychart.color.darken(this.parentColor, 0.15);
+              });
+    
+              // set container id for the chart
+              chart.container('container');
+              // initiate chart drawing
+              chart.draw();
+            }
+          );
+        });
+      
+    </script>
+    </body>
+    </html>
+                    
