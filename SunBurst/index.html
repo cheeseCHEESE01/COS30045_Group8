@@ -36,35 +36,9 @@
     <ul>
       <li><a href="data_android_os_conversion.csv" target="_blank">Android OS Conversions</a>
       </li>
-      <li><a href="data_netflix_churn.csv" target="_blank">Netflix Churn</a>
-      </li>
-      <li><a href="data_page_clicks.csv" target="_blank">Page Clicks</a>
-      </li>
     </ul>
-    <input id="fileUpload" type="file" on-read-file="sunburst.getData($fileContent)" />
     <hr />
 
-
-
-    <!-- details -->
-    <div class="Details">
-      <h2>Details</h2>
-      <p>
-        This is a variation of the original <a href="http://bl.ocks.org/kerryrodden/7090426" target="_blank">sunburst sequence</a>. A major improvement to the original vis is to organize the code base and draw the D3 components (breadcrumbs, sunburst,
-        legend) from a single HTML <code>div</code> tag, and to dynamically assign color and legend scales.
-      </p>
-      <p>
-        The other improvement is generalizing and conventionalizing data inputs. The input requires a simple tabular schema of <code>sequence, stage, node, value</code> (see below) and the program will parse the data into a JSON graph.</p>
-      <p>The design of the data input therefore makes the visualization more useable on relational database queries. The CSV data can be unsorted but it must <em>NOT</em> contain a header, and has to conform to the following data column requirements.
-      </p>
-      <ul>
-        <li><code>sequence (int/string):</code> an ordered sequence that clearly defines the grouping of nodes.</li>
-        <li><code>stage (int): </code>the index/order of nodes in a given sequence.</li>
-        <li><code>node (int/string): </code>the data name of the node.</li>
-        <li><code>value (int): </code>the value at each stage of a given sequence. Only the final stage value in a given sequence is used in this visualization.</li>
-      </ul>
-      <hr />
-    </div>
 
 
     <!-- data/file preview -->

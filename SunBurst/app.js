@@ -15,8 +15,6 @@
         // initialize controller variables
         ctrl.examples = [
           "data_android_os_conversion",
-          "data_netflix_churn",
-          "data_page_clicks"
         ];
         ctrl.exampleSelected = ctrl.examples[0];
         ctrl.getData = getData;
