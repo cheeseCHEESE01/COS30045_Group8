@@ -1,474 +1,171 @@
-<html>
-<header>
-<title>Unemployement Rate in India State</title>
-</header>
+<!DOCTYPE html>
 <head>
-<meta charset="utf-8">
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<style>
-
-.active-state {
-  fill: yellow !important; /* Override any other styles */
-}
-
-
-div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 150px;					
-    height: 70px;					
-    padding: 2px;
-    font: 14px sans-serif;						
-    background: #FFBF00;	
-    border: 0px;			
-    pointer-events: none;			
-}
-
-#map {
-  width: 70%;
-  border: 2px solid green;
-  margin-top: 20px;
-  float: left;
-
-}
-
-#right-clmn {
-  width: 29%;
-  float: left;
-  padding-left: 10px;
-}
-
-.legend {
-  transform: translate(100px, 30px);
-}
-
-.blegend {
-  transform: translate(100px, 70px);
-}
-
-.filtered {
-    fill-opacity: 1 !important;
-}
-
-#filter-buttons {
-  display: flex;
-  justify-content: center;
-  margin: 15px 0; 
-}
-
-.btn {
-  margin: 0 2px;
-  padding: 10px 20px;
-}
-
-#maptext {
-  display: inline-block;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-#maptext.active {
-  background-color: #FFBF00;
-  border-radius: 10px;
-  padding: 10px 30px;
-}
-
-
-.selectState {
-  margin: 0 0 10px 0;
-}
-
-tr, td {
-  text-align: left;
-}
-
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 1.5px;
-}
-
-.Title {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  text-align: center;
-}
-
-.map-row {
-  width: 100%;
-}
-
-</style>
-</head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="landing.css" />
+  </head>
 <body>
-  <!-- Add buttons for filtering -->
+    <div class="container">
+        <div class="content">
+            <h3>Migration of India</h3>
+            <h1>Data Visualisation of the India</h1>
+            <!--<p>Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt utadipiscing
+                elit sed do eiusmod tempor incididunt Lorem</p>
 
-  <div class="Title">
-    <h1>Unemployement Rate in India State</h1>
-    <h2>Migrasion because of </h2>
-  </div>
+            
+            <button class='btn-white '>About Us</button>
+            <button class="btn-green">Join Us</button>
+            -->
 
-  <div class="map-row">
-  <div id="map"></div>
-  <div id="right-clmn">
-    <div id="inner"></div>
-    <div class="selectState">You are selected :
-      <div id="maptext"></div>
+        </div>
+
+
     </div>
-    <label for="percentageToCheck">Filter by Percentage:</label>
-    <input type="number" id="percentageToCheck" placeholder="Enter Percentage">
-    <button onclick="applyFilter()" class="searchb">Filter Data</button>
+    <div class="context textcenter ">
 
-    <div id="filter-buttons">
-    <button onclick="applyFilter(0, 10)" class="btn">0-10%</button>
-    <button onclick="applyFilter(11, 20)" class="btn">11-20%</button>
-    <button onclick="applyFilter(21, 40)" class="btn">21% above</button>
-    <button onclick="resetFilter()" class="btn">Reset</button>
+        <h3 class="textgreen">What we done:</h3>
+        <h2>6 DATA VISUALISATION ABOUT THE INDIA MIGRATION</h2>
+        <p>There are 6 various charts and dataset we have created.</p>
 
-</div>
+    </div>
 
-  
-    <div id="filteredData"></div>
-  </div>
-</div>
+    <div class="container2">
+        <div class="fern">
+            <img src="https://images.pexels.com/photos/2802403/pexels-photo-2802403.jpeg?cs=srgb&dl=pexels-lucky-trips-2802403.jpg&fm=jpg" alt="">
 
-  <script>
-    //let margin = {top: 10, right: 20, bottom: 10, left: 450};
-    let margin = {top: 0, right: 0, bottom: 0, left: 0};
-
-    let width = 1000 - margin.left - margin.right;
-    let height = 650 - margin.top - margin.bottom;
-    
-    let svg = d3.select("#map").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      //.attr("transform", "translate(0,0)");
-
-          
-    // map background
-    svg.append("rect")
-      .attr("width",width)
-      .attr("height",height)
-      .style("fill","green")
-      .style("opacity", 0); //Background best practice
-        
-    let div = d3.select("body").append("div")	
-      .attr("class", "tooltip")				
-      .style("opacity", 0);
-    
-    let activeState = null;
-    let clickedClass = "clicked";
-
-    Promise.all([
-      d3.json("india-states.json"),
-      d3.csv("unemployment.csv")
-    ]).then(function(data){
-      let geoJsonData = data[0];
-      let languageData = data[1];
-      let projection = d3.geoMercator();
-      projection.fitHeight(height-100,geoJsonData);
-      let pathGenerator = d3.geoPath().projection(projection);
-      
-      <!-- Append map of India -->
-      let india = svg.append('g');     
-      india.selectAll('path')
-        .data(geoJsonData.features)
-        .enter()
-        .append('path')
-          .attr('d', pathGenerator)
-          .attr("transform", "translate(0,50)")
-          .style("fill", function(d) {
-            if(d.State == "Kerala") {
-              return "red";
-            }
-            return "back";
-          })
-          .style("stroke", "black")
-          .on("click", function(d) {
-            // Remove the initial translate transform from the Indian map
-            india.selectAll('path')
-            .attr("transform", "translate(0,0)")
-
-            // Define a new zoom level (e.g., 2 for double zoom)
-            const newZoomLevel = 2;
-            
-            // Calculate the new transform based on the clicked position
-            const [x, y] = d3.mouse(this);
-            const scale = newZoomLevel;
-            const translate = [width / 2 - scale * x, height / 2 - scale * y];
-            const transform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale);
-            
-            // Apply the new zoom transform
-            svg.transition().duration(750)
-            .call(zoom.transform, transform);
-
-            /***************************************/
+        </div>
 
 
-            // Remove active class from previously active state
-           if (activeState !== null) {
-            d3.select(activeState).classed("active-state", false);
-          }
+        <div class="context2">
 
-          d3.selectAll('.dynamic-text').remove();
+            <div class="ferncontext">
+                <h3 class="textgreen">About This Project</h3>
+                <h3 class="lightertext">The data visualization of migration in India presents a multifaceted view of demographic movements within the nation. </h3>
+                <p>This comprehensive visual representation encompasses a spectrum of crucial factors influencing migration trends. 
+                    Alongside migration patterns, we gain insights into India's dynamic labor market with visuals depicting the unemployment rate and monthly 
+                    wages in various countries. Furthermore, the visualization delves into India's vast population, offering a clear depiction of its size 
+                    and distribution. Understanding the motivations behind Indian migration is pivotal, and the data visualization provides key insights into 
+                    the factors driving this phenomenon. Additionally, the visualization highlights the correlation between disease prevalence and migration 
+                    patterns, underscoring the importance of public health in demographic shifts. Lastly, the visualization captures the essence of India's 
+                    global presence, showcasing immigration trends from India to various countries. These visuals collectively offer a comprehensive narrative of 
+                    India's demographic landscape, serving as a valuable resource for policymakers, researchers, and stakeholders alike.
+                </p>
 
-          const textContent = `${d.State}: ${d.Unemployment_Percentage_in_2022}%`;
-          const [x2, y2] = projection(d3.geoCentroid(d));
+            </div>
+            <!--
+            <div class="progressbars">
 
-          
-          d3.select("#maptext").html(textContent); 
-          
-          svg.append("text")
-            .attr("x", x2)
-            .attr("y", y2)
-            .text(textContent)
-            .attr("transform", "translate(-200,50)")
-            .attr('class', 'dynamic-text');
+                <div class="progress-status">
+                    <div class="ninty">
+                        <div class="progress blue">
+                            <div class="progress-left">
+                                <div class="progress-value">90%</div>
+                            </div>
+                            <div class="progress-right">
+                            </div>
+                        </div>
+                        <h4>Save Planets</h4>
+                    </div>
 
-          d3.select(this).classed("active-state", true);
-            activeState = this;
-
-          })
-          .on("mouseover", function(d) {
-            div.style("opacity", .9);		
-            div.html("<b><span class='state-text'>" + d.State + "</span></b><br><br>" 
-            + d.Unemployment_Percentage_in_2022 + "%")
-            
-            .style("left", (d3.event.pageX) + "px")		
-            .style("top", (d3.event.pageY - 28) + "px");
-            
-            var originalFillColor = d3.select(this).style("fill");
-
-            d3.select(this) // Select the hovered element
-            .style("fill", "#F8C471"); // Change fill color to blue
-            
-            d3.select(".state-text")
-            .style("font-size", "16px");
-
-            // On mouseout, revert fill color to original
-            d3.select(this)
-          .on("mouseout", function(d) {		
-            div.style("opacity", 0);
-      
-            d3.select(this)
-            .style("fill", originalFillColor);
-          });
-
-          })					
-          .on("mouseout", function(d) {		
-            div.style("opacity", 0).style("fill", function(d) {
-            if(d.State == "Kerala") {
-              return "red";
-            }
-            return "back";
-          })
-          d3.select("#tooltip").remove()
-          ;	
-            
-          });
-      
-      console.log("Bout to go off");
-
-      /**************************************************/
-      // add the active for map 
-      
-      document.getElementById("map").addEventListener("click", function() {
-      document.getElementById("maptext").classList.add("active");
-      });
+                </div>
 
 
-      /**************************************************/
-      
-      let colorScale = d3.scaleLinear()
-        .domain([0, 5])
-        .range(['#FFFFFF', '#E9967A']);
-        
-      /**************************************************/
 
-      india.selectAll('path')
-        .data(languageData)
-        .style("fill", function(d) {
-          let Unemployment_Percentage_in_2022 = d.Unemployment_Percentage_in_2022;
-          
-          return colorScale(Unemployment_Percentage_in_2022);
-          //let team = d.team;
-          /*if(Unemployment_Percentage_in_2022 >= 10) {
-            return orangeScale(Unemployment_Percentage_in_2022);
-          }
-          return greenScale(Unemployment_Percentage_in_2022);
-        });*/
+                <div class="progress-status-green">
+                    <div class="eighty">
+                        <div class="progress-green">
+                            <div class="progress-left-green">
+                                <div class="progress-value-green">80%</div>
+                            </div>
+                            <div class="progress-right-green"></div>
+                        </div>
+                        <h4>Save Planets</h4>
+                    </div>
 
-            //return greenScale(Unemployment_Percentage_in_2022);
-          });
-              
-      
-      console.log("Went off");
-                                  
-    }) //End of Promise
-
-    
-    const zoom = d3.zoom()
-            .scaleExtent([1, 5])
-            .on("zoom", () => {
-              svg.selectAll('g').attr('transform', d3.event.transform);
-            });
-
-        svg.call(zoom);
-
-    /**************************************************/
-
-    let colorScale = d3.scaleLinear()
-        .domain([0, 5])
-        .range(['#FFFFFF', '#E9967A']);
-
-    let width2 = 380;
-    let height2 = 110;
-    let svg2 = d3.select("#inner").append("svg")
-      .attr("width", width2 + margin.left + margin.right)
-      .attr("height", height2 + margin.top + margin.bottom)
-      .attr("transform", "translate(0,0)")
-      .append("g");
-
-      // Create a legend group
-      let legend = svg2.append('g')
-        .attr('class', 'legend')
-        .attr('transform', 'translate(10, 10)'); // Adjust position as needed
-
-      let blk_legend = svg2.append('g')
-        .attr('class', 'blegend')
-        .attr('transform', 'translate(10, 10)');
-
-      // Define gradient
-      let gradient = legend.append('defs')
-        .append('linearGradient')
-        .attr('id', 'colorGradient')
-        .attr('x1', '0%')
-        .attr('y1', '0%')
-        .attr('x2', '100%')
-        .attr('y2', '0%');
-
-      gradient.append('stop')
-        .attr('offset', '0%')
-        .attr('style', 'stop-color:' + colorScale(1));
-
-      gradient.append('stop')
-        .attr('offset', '100%')
-        .attr('style', 'stop-color:' + colorScale(10));
-
-      // Create color bar rectangle
-      legend.append('rect')
-        .attr('width', 180) // Adjust the width of the legend
-        .attr('height', 20) // Adjust the height of the legend
-        .style('fill', 'url(#colorGradient)')
-        .style('stroke', 'black');
-
-      // Add text for lower range
-      let lowerRangeText = legend.append('text')
-        .attr('x', -90) // Adjust the x position to position the text
-        .attr('y', 15) // Adjust the y position to position the text
-        .text('Lower Range')
-        .style('font-size', '15px');
-
-      // Add text for higher range
-      let higherRangeText = legend.append('text')
-        .attr('x', 190) // Adjust the x position to position the text
-        .attr('y', 15) // Adjust the y position to position the text
-        .text('Higher Range')
-        .style('font-size', '15px');
-
-      // Create color bar rectangle
-      blk_legend.append('rect')
-        .attr('width', 100) // Adjust the width of the legend
-        .attr('height', 20) // Adjust the height of the legend
-        //.style('fill', 'url(#colorGradient)')
-        .style('fill', 'black')
-        .style('stroke', 'black');
-
-      // Add text for lower range
-      let blkText = blk_legend.append('text')
-        .attr('x', 120) // Adjust the x position to position the text
-        .attr('y', 15) // Adjust the y position to position the text
-        .text('Undifined data')
-        .style('font-size', '15px');
-
-
-      /**************************************/
-      // filter button
-
-      function applyFilter(minRange, maxRange) {
-      d3.csv("unemployment.csv").then(function(data) {
-        let filteredData;
-
-        if (minRange !== undefined && maxRange !== undefined) {
-            // Filter by range
-            filteredData = data.filter(function(d) {
-                let unemploymentPercentage = parseFloat(d.Unemployment_Percentage_in_2022);
-                return unemploymentPercentage >= minRange && unemploymentPercentage <= maxRange;
-            });
-        } else {
-            // Filter by input value
-            let filterValue = parseFloat(document.getElementById("percentageToCheck").value);
-            filteredData = data.filter(function(d) {
-                return parseFloat(d.Unemployment_Percentage_in_2022) > filterValue;
-            });
-        }
-
-        let colorScale = d3.scaleLinear()
-        .domain([0, 5])
-        .range(['#FFFFFF', '#E9967A']);
-
-        // Update map colors
-        d3.selectAll('path')
-            .style("fill", function(d) {
-                let stateData = filteredData.find(entry => entry.State === d.State);
-                if (stateData) {
-                    return colorScale(parseFloat(stateData.Unemployment_Percentage_in_2022));
-                } else {
-                    return "gray"; // Default color for states not in filtered data
-                }
-            });
-
-        // Update table
-        let tableHTML = "<table><tr><th>State</th><th>Unemployment Percentage</th></tr>";
-        filteredData.forEach(function(d) {
-            tableHTML += "<tr><td>" + d.State + "</td><td>" + d.Unemployment_Percentage_in_2022 + "%</td></tr>";
-        });
-        tableHTML += "</table>";
-
-        document.getElementById("filteredData").innerHTML = tableHTML;
-    });
-}
-
-    function resetFilter() {
-      d3.selectAll('path')
-        .classed('filtered', false)
-        .style("fill", function(d) {
-          return colorScale(d.Unemployment_Percentage_in_2022);
-        });
-
-        document.getElementById("filteredData").innerHTML = ""; // This line removes the content of the 'filteredData' div
-
-    }
+                </div>
 
 
 
 
 
+                <div class="progress-status-golden">
+                    <div class="seventyfive">
+                        <div class="progress-golden">
+                            <div class="progress-left-golden">
+                                <div class="progress-value golden">75%</div>
+                            </div>
+                            <div class="progress-right-golden"></div>
+                        </div>
+                        <h4>Save Planets</h4>
+                    </div>
+                </div>
+
+            </div>
+            -->
+        </div>
+    </div>
+
+
+    <!-- forest forest forest forest forest forestforestforestforestforestforestforest-->
 
 
 
-  </script>
-  
-  </div>
+
+    <div class="forest">
+
+        <div class="forest__context">
+            <div class="forest--text">
+                
+                <div class="forest__heading">
+                    <h3>We provide</h3>
+                    <h1>Data Visualisations</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="forest--boxes">
+
+            <a href="choropleth_map.html" class="box" >
+                <span><i class="fab fa-pagelines"></i></span>
+                <h2>Unemployement Rate in India</h2>
+                <p>Choropleth map chart</p>
+            </a>
+
+            <a href="heatmap.html" class="box">
+                 <span><i class="fa-solid fa-paw"></i></span>
+                <h2>Monthly Wages of Various Countries</h2>
+                <p>Heatmap chart</p>
+            </a>
+
+            <div class="box">
+                <span><i class="fas fa-tree"></i></span>
+                <h2>Population of the India</h2>
+                <p>Sunburst chart</p>
+            </div>
+
+            <div class="box">
+                <span><i class="fas fa-tint"></i></span>
+                <h2>Indian Migration Reason</h2>
+                <p>Pie chart</p>
+            </div>
+
+            <div class="box">
+                <span><i class="fab fa-envira"></i></span>
+                <h2>Disease Leads to Migration</h2>
+                <p>Clustered stacked bar chart</p>
+            </div>
+
+
+            <div class="box">
+                <span><i class="far fa-snowflake"></i></span>
+                <h2>Immigration From India to Other Countries</h2>
+                <p>Bubble chart</p>
+            </div>
+
+
+        </div>
+    </div>
+
+
 </body>
-</html>
+

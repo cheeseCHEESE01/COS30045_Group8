@@ -105,12 +105,11 @@ th {
   <button class="filterButton" data-country="Austria">Austria</button>
   <button class="filterButton" data-country="Italy">Italy</button>
   <button class="filterButton" data-country="Germany">Germany</button>
+  <button class="filterButton" data-country="All">All</button>
 
   <div id="C-name"></div>
   <div id="table_Country"></div>
 </div>
-
-
 
 <script>
 
@@ -128,7 +127,7 @@ th {
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
   
-  /**************************************/
+/**************************************/
 
   // Build X scales and axis:
   var x = d3.scaleBand()
@@ -140,7 +139,7 @@ th {
     .range([ height, 0 ])
     .padding(0.03);
   
-  /**************************************/
+/**************************************/
 
   // Build color scale
   /*
@@ -152,7 +151,7 @@ th {
   //Read the data
   d3.csv("salary.csv", function(data) {
 
-  /***************************************/
+/***************************************/
   
   // Ascending the year 
 
@@ -165,74 +164,7 @@ th {
   var minWages = d3.min(data, function(d) { return +d.monthly_wages; });
   var maxWages = d3.max(data, function(d) { return +d.monthly_wages; });
 
-  /***************************************/
-
-  /*
-  var myColor = d3.scaleLinear()
-  .range(["#EBF4FA", "#D0EFFF"])
-  .domain([minWages, 0.100]);
-
-var myColor2 = d3.scaleLinear()
-  .range(["#ADD8E6", "#B0CFDE"])
-  .domain([0.101, 0.150]);
-
-var myColor3 = d3.scaleLinear()
-  .range(["#89CFF0", "#B0E0E6"])
-  .domain([0.151, 0.200]);
-
-var myColor4 = d3.scaleLinear()
-  .range(["#87CEEB", "#6495ED"])
-  .domain([0.2001, 1.000]);
-
-var myColor5 = d3.scaleLinear()
-  .range(["#1E90FF", "#3090C7"])
-  .domain([1.001, 4.000]);
-
-var myColor6 = d3.scaleLinear()
-  .range(["#368BC1", "#2554C7"])
-  .domain([4.001, 5.000]);
-
-var myColor7 = d3.scaleLinear()
-  .range(["#2554C7", "#1D4DAB"])
-  .domain([5.001, 7.000]);
-
-var myColor8 = d3.scaleLinear()
-  .range(["#155691", "#0D4F76"])
-  .domain([7.001, 8.000]);
-  
-var myColor9 = d3.scaleLinear()
-  .range(["#05475C", "#003E42"])
-  .domain([8.001, 10.000]);
-
-var myColor10 = d3.scaleLinear()
-  .range(["#003429", "#040720"])
-  .domain([10.001, maxWages]);
-
-
-  var Color = function(d) {
-  if (d >= minWages && d <= 0.100) {
-    return myColor(d);
-  } else if (d >= 0.101 && d <= 0.150) {
-    return myColor2(d);
-  } else if (d >= 0.151 && d <= 0.200) {
-    return myColor3(d);
-  } else if (d >= 0.2001 && d <= 1.000) {
-    return myColor4(d);
-  } else if (d >= 1.001 && d <= 4.000) {
-    return myColor5(d);
-  } else if (d >= 4.001 && d <= 5.000) {
-    return myColor6(d);
-  } else if (d >= 5.001 && d <= 7.000) {
-    return myColor7(d);
-  } else if (d >= 7.001 && d <= 8.000) {
-    return myColor8(d);
-  } else if (d >= 8.001 && d <= 10.000) {
-    return myColor9(d);
-  } else if (d >= 10.001 && d <= maxWages) {
-    return myColor10(d);
-  } 
-};
-*/
+/***************************************/
 
 var myColor = d3.scaleLinear()
   .range(["#EBF4FA", "#D0EFFF"])
@@ -380,10 +312,20 @@ var myColor10 = d3.scaleLinear()
 d3.selectAll(".filterButton").on("click", function() {
   var selectedCountry = d3.select(this).attr("data-country");
   
-  // Filter data based on selectedCountry
-  var filteredData = data.filter(function(d) {
-    return d.country_name === selectedCountry;
-  });
+  if (selectedCountry === "All") {
+    // Reset the country name div
+    d3.select("#C-name").text('');
+
+    // Clear the table
+    d3.select("#monthlyWagesTable").remove();
+
+    // Reload the table with all data
+    displayMonthlyWagesTable(data);
+  } else {
+    // Filter data based on selectedCountry
+    var filteredData = data.filter(function(d) {
+      return d.country_name === selectedCountry;
+    });
 
   d3.select("#C-name")
     .text(selectedCountry);
@@ -393,11 +335,83 @@ d3.selectAll(".filterButton").on("click", function() {
 
   // Display monthly wages in a table
   displayMonthlyWagesTable(filteredData);
+  }
 });
 
+
+function displayAllSquares() {
+  // Clear existing rectangles
+  svg.selectAll("rect").remove();
+
+  // Add the squares for all data
+  svg.selectAll()
+    .data(data)  // Use the original data
+    .enter()
+    .append("rect")
+    .attr("x", function(d) { return x(d.country_name) })
+    .attr("y", function(d) { return y(d.year) })
+    .attr("width", x.bandwidth() )
+    .attr("height", y.bandwidth() )
+    .style("fill", function(d) { return Color(d.monthly_wages);} )
+    .style("stroke-width", 4)
+    .style("stroke", "none")
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave);
+}
+
 function updateHeatmap(filteredData) {
-  // Code to update heatmap based on filteredData
-  // You may need to redraw the heatmap with the filtered data
+  // Clear existing rectangles
+  svg.selectAll("rect").remove();
+
+  d3.selectAll(".filterButton").on("click", function() {
+  var selectedCountry = d3.select(this).attr("data-country");
+
+  if (selectedCountry === "All") {
+    // Reset the country name div
+    d3.select("#C-name").text('All Country');
+
+    // Clear the table
+    d3.select("#monthlyWagesTable").remove();
+
+    // Call the function to display all squares
+    displayAllSquares();
+
+    displayMonthlyWagesTable(data);
+  } else {
+
+    // Filter data based on selectedCountry
+    var filteredData = data.filter(function(d) {
+      return d.country_name === selectedCountry;
+    });
+
+    d3.select("#C-name")
+      .text(selectedCountry);
+
+    // Clear existing rectangles
+    svg.selectAll("rect").remove();
+
+    // Add the squares for filtered data
+    svg.selectAll()
+      .data(filteredData)
+      .enter()
+      .append("rect")
+      .attr("x", function(d) { return x(d.country_name) })
+      .attr("y", function(d) { return y(d.year) })
+      .attr("width", x.bandwidth() )
+      .attr("height", y.bandwidth() )
+      .style("fill", function(d) { return Color(d.monthly_wages);} )
+      .style("stroke-width", 4)
+      .style("stroke", "none")
+      .on("mouseover", mouseover)
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave);
+      
+    // Display monthly wages in a table
+    displayMonthlyWagesTable(filteredData);
+  }
+
+});
 }
 
 function displayMonthlyWagesTable(filteredData) {
@@ -412,7 +426,7 @@ function displayMonthlyWagesTable(filteredData) {
   // Create table headers
   var headers = table.append("thead").append("tr");
   headers.selectAll("th")
-    .data(["Year", "Monthly Wages"])
+    .data(["Counrty Name", "Year", "Monthly Wages"])
     .enter().append("th")
     .text(function(d) { return d; });
   
@@ -424,13 +438,13 @@ function displayMonthlyWagesTable(filteredData) {
   
   // Populate table cells
   rows.selectAll("td")
-    .data(function(d) { return [d.year, d.monthly_wages]; })
+    .data(function(d) { return [d.country_name, d.year, d.monthly_wages]; })
     .enter().append("td")
     .text(function(d) { return d; });
 }
 
-  
-  /**********************************************************/  
+
+/**********************************************************/  
   
   // color legend 
   var legendData = [
