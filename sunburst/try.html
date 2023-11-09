@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunburst Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        #chart {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #tooltip {
+            position: absolute;
+            opacity: 0;
+            background-color: white;
+            padding: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chart"></div>
+    <div id="tooltip"></div>
+
+    <script>
+        function init() {
+            const svgWidth = 600;
+const svgHeight = 400;
+
+const svg = d3.select('#chart')
+    .append('svg')
+    .attr('width', svgWidth)
+    .attr('height', svgHeight);
+
+d3.csv('data1.csv').then((data) => {
+    const xScale = d3.scaleBand()
+        .domain(data.map(d => d.Age_Group))
+        .range([0, svgWidth])
+        .padding(0.1);
+
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => +d.Value)])
+        .range([svgHeight, 0]);
+
+    svg.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('x', d => xScale(d.Age_Group))
+        .attr('y', d => yScale(+d.Value))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => svgHeight - yScale(+d.Value))
+        .attr('fill', 'blue');
+
+    // Add text labels
+    svg.selectAll('text')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('x', d => xScale(d.Age_Group) + xScale.bandwidth() / 2)
+        .attr('y', d => yScale(+d.Value) - 5) // Adjust the position of the text above the bars
+        .attr('text-anchor', 'middle')
+        .text(d => d.Value);
+}).catch((error) => {
+    console.error('Error loading the CSV file:', error);
+});
+
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>

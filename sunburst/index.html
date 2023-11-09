@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunburst Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<style>
+#chart {
+    max-width: 800px;
+    margin: 0 auto;
+}
+        
+#tooltip {
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        background-color: rgb(18, 173, 147);
+        border: 1px solid rgb(0, 0, 0);
+        padding: 20px;
+        pointer-events: none;
+        color: black;
+        opacity: 0;
+}
+
+.info {
+    color: black;
+}
+
+        
+</style>
+
+<body>
+    <script src="script.js"></script> 
+    <div id="chart"></div>
+    <div id="tooltip" class="tooltip">
+        <div id="info" class="info"></div>
+    </div>
+
+    <script>
+        
+    </script>
+
+    <!--
+    <script>
+        function init(){
+            // Fetch the CSV file
+            d3.csv('data.csv').then((csvData) => {
+                // Convert CSV data to hierarchical structure
+                const data = convertCSVToHierarchy(csvData);
+
+                // Define chart dimensions
+                const width = 800;
+                const height = 600;
+                const radius = Math.min(width, height) / 2;
+
+                // Define color scale
+                const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+                // Create a partition layout
+                const partition = d3.partition()
+                    .size([2 * Math.PI, radius]);
+
+                // Create an arc generator
+                const arc = d3.arc()
+                    .startAngle(d => d.x0)
+                    .endAngle(d => d.x1)
+                    .innerRadius(d => d.y0)
+                    .outerRadius(d => d.y1);
+
+                // Create a root node
+                const root = d3.hierarchy(data)
+                    .sum(d => d.value || 0)
+                    .sort((a, b) => b.value - a.value);
+
+                // Set up the SVG canvas
+                const svg = d3.select('#chart')
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .append('g')
+                    .attr('transform', `translate(${width / 2},${height / 2})`);
+
+                // Draw the sunburst chart
+                const g = svg.selectAll('g')
+                    .data(partition(root).descendants())
+                    .enter().append('g');
+
+                g.append('path')
+                    .attr('d', arc)
+                    .style('fill', d => color(d.data.name))
+                    .on('click', clicked);
+
+                // Add text labels
+                g.append('text')
+                    .attr('transform', d => `translate(${arc.centroid(d)})`)
+                    .attr('dy', '0.35em')
+                    .attr('text-anchor', 'middle')
+                    .text(d => d.data.name);
+
+                // Function to handle click events for zooming
+                function clicked(p) {
+                    svg.transition()
+                        .duration(750)
+                        .tween('scale', () => {
+                            const i = d3.interpolateZoom(view, [p.x0, p.y0, p.x1, radius]);
+                            return t => zoomTo(i(t));
+                        });
+                }
+
+                function zoomTo(v) {
+                    const k = radius / v[2];
+                    view = v;
+                    g.attr('transform', d => `translate(${width / 2},${height / 2}) scale(${k})`);
+                    g.selectAll('path').attr('d', arc);
+                }
+
+                let view = [root.x0, root.y0, root.x1, root.y1];
+            });
+
+            function convertCSVToHierarchy(csvData) {
+                const hierarchyData = { name: 'Root', children: [] };
+
+                csvData.forEach(row => {
+                    let currentNode = hierarchyData;
+                    const categories = row.Category.split('/');
+
+                    categories.forEach(category => {
+                        let childNode = currentNode.children.find(node => node.name === category);
+
+                        if (!childNode) {
+                            childNode = { name: category, children: [] };
+                            currentNode.children.push(childNode);
+                        }
+
+                        currentNode = childNode;
+                    });
+
+                    currentNode.children.push({ name: row.Name, value: +row.Value });
+                });
+
+                return hierarchyData;
+            }
+        }
+        window.onload = init;
+    </script>
+    -->
+</body>
+</html>
