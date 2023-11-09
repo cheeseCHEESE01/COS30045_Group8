@@ -51,14 +51,14 @@
     var data_ready = pie(d3.entries(data))
   
     // map to data
-    var u = svg.selectAll("path")
+    var chart = svg.selectAll("path")
       .data(data_ready)
   
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-    u
+    chart
       .enter()
       .append('path')
-      .merge(u)
+      .merge(chart)
       .transition()
       .duration(1000)
       .attr('d', d3.arc()
