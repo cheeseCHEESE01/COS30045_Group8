@@ -1,81 +1,30 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-      <script src="https://cdn.anychart.com/releases/v8/js/anychart-sunburst.min.js"></script>
-      <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-      <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
-      <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
-      <script src="https://d3js.org/d3.v5.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Data Visualisation Exercise 5.3"/>
 
-      <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
-      <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
-      <style type="text/css">
-    
-        html,
-        body,
-        #container {
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          padding: 0;
-        }
-      
-    </style>
-    </head>
-    <body>
-      
-      <div id="container"></div>
-      
-    
-      <script>
-    
-        anychart.onDocumentReady(function () {
-          // The data used in this sample can be obtained from the CDN
-          // https://cdn.anychart.com/samples/sunburst-charts/the-population-of-the-europe/data.json
-          anychart.data.loadJsonFile(
-            'https://cdn.anychart.com/samples/sunburst-charts/the-population-of-the-europe/data.json',
-            function (data) {
-              // makes tree from the data for the sample
-              var dataTree = anychart.data.tree(data, 'as-table');
-    
-              // create sunburst chart
-              var chart = anychart.sunburst(dataTree);
-    
-              // set calculation mode
-              chart.calculationMode('parent-independent');
-    
-              // set chart title
-              chart.title('Population In India');
-    
-              // set custom palette
-              chart.palette(['#0288d1', '#d4e157', '#ff6e40', '#f8bbd0']);
-    
-              // format chart labels
-              chart
-                .labels()
-                .format('{%Name}\n{%Value}{scale:(1000000)(1)|( mln)}');
-    
-              // format chart tooltip
-              chart
-                .tooltip()
-                .format('Population: {%Value}{scale:(1000000)(1)|( mln)}');
-    
-              // the fill specified in the data has priority
-              // set point fill
-              chart.fill(function () {
-                return anychart.color.darken(this.parentColor, 0.15);
-              });
-    
-              // set container id for the chart
-              chart.container('container');
-              // initiate chart drawing
-              chart.draw();
-            }
-          );
-        });
-      
-    </script>
-    </body>
-    </html>
-                    
+
+<title>Lab 7.2 D3 Pie Chart</title>
+
+<link rel="stylesheet" href="Lab1.css">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="Lab7.2.js"></script>
+<link rel="stylesheet" href="Lab7.1.css">
+
+</head>
+<body>
+<h1>Lab 7.2 D3 Pie Chart</h1>
+
+<p id="chart"></p>
+
+<div class="link-box">
+    <a class="link1" href="Lab7.1.html">Lab 7.1</a>
+    <a class="link2" href="index.html">Index List</a>
+    <a class="link3" href="Lab7.3.html">Lab 7.3</a>
+</div>
+<br>
+    <footer style="color: grey;">COS30045 Data Visualisation <br>SO WAI TING</footer>
+
+</body>
+</html>
