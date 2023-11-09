@@ -79,10 +79,6 @@ function init(){
     let originalFillColor;
     function handleMouseOver(d) {
 
-        console.log(d); // Log the entire data object
-    console.log(d.data); // Log d.data
-    console.log(d.parent); // Log d.parent
-    console.log(d.parent && d.parent.data); 
         // Define behavior when mouse hovers over a segment
         // For example, you can change the color or display additional information
 
@@ -96,27 +92,9 @@ function init(){
             .select('text') // Select the text element inside the <g>
             .style('fill', 'white'); // Set the fill color to white
         
-        
-        /*
-        let year, ageGroup, value;
-
-        if (d.depth === 1) {
-            year = d.data.name;
-            value = d.value;
-        } else if (d.depth === 2) {
-            year = d.parent.data.name;
-            ageGroup = d.data.name;
-            value = d.value;
-        }
-        */
-       
-    
         g.append("title")
             .style('opacity', 1)
-            .text(d => `${d.data.name} (${d.value})`)
-            .style("font-size", "50px")
-            .style("stroke", "#000000");
-            
+            .text(d => `${d.data.name} (${d.value})`);
 
             let year, ageGroup, value;
 
@@ -130,13 +108,19 @@ function init(){
             }
         
             // Now you have access to year, ageGroup, and value based on the depth of the element
+            csvData.forEach((row) => {
+                const year = row.Year; // Access the 'Year' column
+                const ageGroup = row.Age_Group; // Access the 'Age_Group' column
+                const value = +row.Value; // Access the 'Value' column (parsed as a number)
         
-            d3.select('#tooltip')
+                // Now you have access to 'year', 'ageGroup', and 'value' for each row in the CSV data
+                console.log(`Year: ${year}, Age Group: ${ageGroup}, Value: ${value}`);
+    
+                d3.select('#tooltip')
                 .style('opacity', 1)
                 .select('#info')
                 .text(`Year: ${year}, Age Group: ${ageGroup}, Value: ${value}`);
-        
-      
+            })
         
     }
     
@@ -158,20 +142,26 @@ function init(){
     });
 
     function convertCSVToHierarchy(csvData) {
+        // Get unique years from the CSV data
         const years = [...new Set(csvData.map(row => row.Year))];
-    
+        
+        // Create a hierarchical data structure with a root node and children array
         const hierarchyData = {
             name: 'Root',
             children: years.map(year => {
+                // Filter data for the current year
                 const yearData = csvData.filter(row => row.Year === year);
     
+                // Map data to create children nodes with 'name' as 'Age_Group' and 'value' as 'Value'
                 const children = yearData.map(row => ({
                     name: row['Age_Group'],
                     value: +row.Value
                 }));
     
+                // Log information about the current year and its children
                 console.log(`Year: ${year}`, children);
     
+                // Return an object with the year as 'name' and the children nodes
                 return {
                     name: year,
                     children: children
@@ -179,10 +169,13 @@ function init(){
             })
         };
     
+        // Log the hierarchical data structure
         console.log('Hierarchy Data:', hierarchyData);
     
+        // Return the hierarchical data
         return hierarchyData;
     }
+    
     
 
     
