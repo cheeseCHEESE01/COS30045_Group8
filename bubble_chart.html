@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        
+        <style>
+        .tooltip {
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 10px;
+            opacity: 0;
+            padding: 10px;
+            pointer-events: none;
+            position: absolute;
+        }
+        </style>
+    </head>
+    
+    <body>
+        <div>
+            <label for="filterInput">Minimum Immigrant Population:</label>
+            
+            <input type="number" id="filterInput" value="0">
+            
+            <button onclick="filterData()">Filter</button>
+        </div>
+        
+        <script>
+        let originalData
+        
+        d3.csv("immigrant.csv").then(function (data) {
+            originalData = data
+            
+            updateChart(data)
+        })
+        
+        function updateChart(data) {
+            d3.select("svg")
+            .remove()
+            
+            const margin = { top: 28, right: 20, bottom: 70, left: 50 }
+            const width = 800 - margin.left - margin.right
+            const height = 600 - margin.top - margin.bottom
+            
+            const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            
+            const xScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => parseFloat(d.immigrant_population_from_india))])
+            .range([0, width])
+            
+            const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => parseFloat(d.percentage_of_metro_area_population))])
+            .range([height, 0])
+            
+            const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(data.map(d => d.metropolitan_area))
+            
+            const xAxis = d3.axisBottom(xScale)
+            const yAxis = d3.axisLeft(yScale)
+            
+            svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            
+            svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + margin.top + 20)
+            .attr("dy", "0em")
+            .style("text-anchor", "middle")
+            .text("Immigrant Population from India")
+            
+            svg.append("g")
+            .call(yAxis)
+            
+            svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", - height / 2)
+            .attr("y", - margin.left)
+            .attr("dy", "1em")
+            .attr("text-anchor", "middle")
+            .text("Percentage of Metro Area Population")
+            
+            const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0)
+            
+            const simulation = d3.forceSimulation(data)
+            .force("x", d3.forceX(d => xScale(parseFloat(d.immigrant_population_from_india))).strength(1))
+            .force("y", d3.forceY(d => yScale(parseFloat(d.percentage_of_metro_area_population))).strength(1))
+            .force("collide", d3.forceCollide().radius(d => Math.sqrt(parseFloat(d.percentage_of_metro_area_population)) * 10 + 2))
+            .stop()
+            
+            for (let i = 0; i < 120; ++i) simulation.tick()
+            
+            svg.selectAll("circle")
+            .data(data)
+            .enter().append("circle")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("r", d => Math.sqrt(parseFloat(d.percentage_of_metro_area_population)) * 10)
+            .style("fill", d => colorScale(d.metropolitan_area))
+            .style("stroke", "black")
+            .style("stroke-width", 2)
+            .on("mouseover", function (d) {
+                d3.select(this).style("fill", "coral")
+                svg.selectAll("circle:not(:hover)").style("fill", "#964B00")
+                tooltip.transition()
+                .duration(200)
+                .style("opacity", .9)
+                tooltip.html(`<strong>${d.metropolitan_area}</strong><br/>Immigrant Population: ${d.immigrant_population_from_india}<br/>Percentage of Population: ${d.percentage_of_metro_area_population}`)
+                .style("left", (d3.event.pageX + 5) + "px")
+                .style("top", (d3.event.pageY - 28) + "px")
+            })
+            .on("mouseout", function (d) {
+                d3.select(this).style("fill", d => colorScale(d.metropolitan_area))
+                svg.selectAll("circle").style("fill", d => colorScale(d.metropolitan_area))
+                tooltip.transition()
+                .duration(500)
+                .style("opacity", 0)
+            })
+        }
+        
+        function filterData() {
+            const minPopulation = parseFloat(document.getElementById("filterInput").value)
+            
+            const filteredData = originalData.filter(d => parseFloat(d.immigrant_population_from_india) >= minPopulation)
+            
+            updateChart(filteredData)
+        }
+        </script>
+    </body>
+</html>
