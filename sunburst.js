@@ -1,6 +1,6 @@
 function init(){
     // Fetch the CSV file
-    d3.csv('data1.csv').then((csvData) => {
+    d3.csv('population.csv').then((csvData) => {
         //console.log(csvData);
 
         // Convert CSV data to hierarchical structure
@@ -95,28 +95,12 @@ function init(){
         d3.select(this.parentNode) // Select the parent node (the <g> element)
             .select('text') // Select the text element inside the <g>
             .style('fill', 'white'); // Set the fill color to white
-        
-        
-        /*
-        let year, ageGroup, value;
-
-        if (d.depth === 1) {
-            year = d.data.name;
-            value = d.value;
-        } else if (d.depth === 2) {
-            year = d.parent.data.name;
-            ageGroup = d.data.name;
-            value = d.value;
-        }
-        */
-       
     
         g.append("title")
             .style('opacity', 1)
             .text(d => `${d.data.name} (${d.value})`)
             .style("font-size", "50px")
             .style("stroke", "#000000");
-            
 
             let year, ageGroup, value;
 
@@ -134,10 +118,7 @@ function init(){
             d3.select('#tooltip')
                 .style('opacity', 1)
                 .select('#info')
-                .text(`Year: ${year}, Age Group: ${ageGroup}, Value: ${value}`);
-        
-      
-        
+                .html(`Year: ${year}, <br>Age Group: ${ageGroup}, <br>Value: ${value}`);
     }
     
 
