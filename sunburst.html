@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="description" content="Data Visualisation Exercise 5.3"/>
-
-
-<title>Lab 7.2 D3 Pie Chart</title>
-
-<link rel="stylesheet" href="Lab1.css">
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="Lab7.2.js"></script>
-<link rel="stylesheet" href="Lab7.1.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunburst Chart</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
+
+<style>
+#chart {
+    max-width: 800px;
+    margin: 0 auto;
+}
+        
+#tooltip {
+        position: absolute;
+        left: 45%;
+        top: 35%;
+        background-color: none;
+        text-align: center;
+        padding: 20px;
+        pointer-events: none;
+        color: black;
+        opacity: 0;
+        line-height: 200%;
+}
+
+.info {
+    color: black;
+}
+
+        
+</style>
+
 <body>
-<h1>Lab 7.2 D3 Pie Chart</h1>
-
-<p id="chart"></p>
-
-<div class="link-box">
-    <a class="link1" href="Lab7.1.html">Lab 7.1</a>
-    <a class="link2" href="index.html">Index List</a>
-    <a class="link3" href="Lab7.3.html">Lab 7.3</a>
-</div>
-<br>
-    <footer style="color: grey;">COS30045 Data Visualisation <br>SO WAI TING</footer>
-
+    <script src="sunburst.js"></script> 
+    <div id="chart"></div>
+    <div id="tooltip" class="tooltip">
+        <div id="info" class="info"></div>
+    </div>
+   
 </body>
 </html>
