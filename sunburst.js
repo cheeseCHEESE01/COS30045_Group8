@@ -1,10 +1,86 @@
 function init(){
+    
     // Fetch the CSV file
     d3.csv('population.csv').then((csvData) => {
         //console.log(csvData);
 
         // Convert CSV data to hierarchical structure
         const data = convertCSVToHierarchy(csvData);
+
+
+        /*******************(******** Table **************************/
+        
+        // Define showTableByAgeGroup within the init function
+        showTableByAgeGroup = function(ageGroup) {
+            // Check if csvData is defined and is an array
+            if (!Array.isArray(csvData)) {
+                console.error('Error: csvData is not defined or not an array.');
+                return;
+            }
+
+            // Assuming 'Age_Group' is a column in your CSV data
+            const filteredData = csvData.filter(row => row['Age_Group'] === ageGroup);
+
+            // Check if filteredData is defined and is an array
+            if (!Array.isArray(filteredData)) {
+                console.error('Error: filteredData is not defined or not an array.');
+                return;
+            }
+
+            console.log('Filtered Data:', filteredData); // Log the filtered data
+
+            const tableContainer = d3.select('#table-container');
+
+            // Clear existing table content
+            tableContainer.html('');
+
+            // Create a new table
+            const table = tableContainer.append('table');
+            const header = table.append('thead').append('tr');
+            header.selectAll('th')
+                .data(['Year', 'Age Group', 'Value'])
+                .enter().append('th')
+                .text(d => d);
+
+            const rows = table.append('tbody').selectAll('tr')
+                .data(filteredData)
+                .enter().append('tr');
+
+            rows.selectAll('td')
+                .data(d => Object.values(d))
+                .enter().append('td')
+                .text(d => d);
+
+            console.log('Showing table for age group:', ageGroup);
+        };
+
+        // Reset the filter and show the original table
+
+        window.resetFilter = function () {
+            const tableContainer = d3.select('#table-container');
+        
+            // Remove the entire table container
+            tableContainer.remove();
+        
+            console.log('Resetting filter');
+        
+            // Recreate the table container
+            createTableContainer();
+        };
+        
+        // Function to create the table container
+        function createTableContainer() {
+            const tableContainer = d3.select('body').append('div').attr('id', 'table-container');
+            console.log('Table container created');
+        
+        
+            // Add any additional logic to create the table within the container if needed
+        }
+        
+        
+
+        /*************************************************************/
+
 
         // Define chart dimensions
         const width = 600;
@@ -64,7 +140,9 @@ function init(){
             .attr('text-anchor', 'middle')
             .text(d => d.data.name);
             
-        
+    
+    /************************** color legend ****************************/
+
     // Create an age group legend
     const legendContainer = d3.select('#legend');
 
@@ -85,7 +163,7 @@ function init(){
         .attr('class', 'legend-label')
         .text(d => d.name);
 
-
+    
     /*********************** mouse over & mouse out ***********************/
 
     let originalFillColor;
@@ -175,3 +253,5 @@ function init(){
 }
 
 window.onload = init;
+
+

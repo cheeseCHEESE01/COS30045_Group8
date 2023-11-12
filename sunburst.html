@@ -81,6 +81,51 @@
     font-size: 14px;
 }
 
+table {
+    width: 80%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.19);
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #b6b5b5;
+}
+
+th {
+    background-color: #43293e;
+    font-weight: bold;
+    color: #fff5f5;
+}
+
+tr:hover {
+    background-color: #f1e3ef;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 25px;
+    margin: 5px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #241a22;
+    color: #43293e;
+    border-radius: 4px;
+    background-color: #f1e3ef;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #534653;
+    color: #fff;
+}
+
         
 </style>
 
@@ -98,7 +143,23 @@
             <div id="legend"></div>
         </div>
     </div> 
-    
+    <div id="filter-buttons">
+        <button onclick="showTableByAgeGroup('Age0-18')" class="btn">Age 0-18</button>
+        <button onclick="showTableByAgeGroup('Age19-30')" class="btn">Age 19-30</button>
+        <button onclick="showTableByAgeGroup('Age31-40')" class="btn">Age 31-40</button>
+        <button onclick="showTableByAgeGroup('Age41-50')" class="btn">Age 41-50</button>
+        <button onclick="showTableByAgeGroup('Age51-60')" class="btn">Age 51-60</button>
+        <button onclick="showTableByAgeGroup('Age60-70')" class="btn">Age 60-70</button>
+        <button onclick="showTableByAgeGroup('Age71-80')" class="btn">Age 71-80</button>
+        <button onclick="showTableByAgeGroup('Age81-90')" class="btn">Age 81-90</button>
+        <button onclick="showTableByAgeGroup('Age91-99')" class="btn">Age 91-99</button>
+        <button onclick="showTableByAgeGroup('Age 100+')" class="btn">Age 100+</button>
+        
+        <button onclick="resetFilter()" class="btn">Reset</button>
+    </div>
+
+    <div id="table-container"></div>
+
    
 </body>
 </html>
