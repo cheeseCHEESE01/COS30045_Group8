@@ -1,44 +1,42 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+  body {
+    font: 10px sans-serif;
+  }
 
-body {
-  font: 10px sans-serif;
-}
+  .arc path {
+    stroke: #fff;
+  }
 
-.arc path {
-  stroke: #fff;
-}
-
+  .tooltip {
+    position: absolute;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 12px;
+  }
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var width = 960,
-    height = 500,
-    // find the min of width and height and devided by 2
+var width = 1200,
+    height = 700,
     radius = Math.min(width, height) / 2;
 
-// Scales are functions that map from an input domain to an output range.  Ordinal scales have a discrete domain, such as a set of names or categories. 
-// from: https://github.com/mbostock/d3/wiki/Ordinal-Scales
 var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#E6B0AA", "#AF7AC5", "#5DADE2", "#48C9B0", "#ABEBC6", "#F7DC6F", "#DC7633", "#979A9A", "#5D6D7E", "#4A235A", "#2874A6", "#CD4639", "#FFA7F7", "#D2E559"]);
 
-// Constructs a new arc generator with the default innerRadius-, outerRadius-, startAngle- and endAngle-accessor functions.  
-// from: https://github.com/mbostock/d3/wiki/SVG-Shapes#arc
+// 修改内外半径以创建环形图
 var arc = d3.svg.arc()
-    // the outer radius of the pie chart.
-    .outerRadius(radius - 10)
-    // the inner radius of the pie chart, set 0 for now
-    .innerRadius(0);
+    .outerRadius(radius - 250)
+    .innerRadius(radius - 10); // 调整内半径以创建环
 
-
-// Constructs a new pie function
 var pie = d3.layout.pie()
-    // not sorting
     .sort(null)
-    // set the pie chart value to population.
     .value(function(d) { return d.male; });
 
 var svg = d3.select("body").append("svg")
@@ -47,14 +45,16 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-d3.csv("data.csv", function(error, data) {
+var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
-  // convert all population to integer
+d3.csv("data.csv", function(error, data) {
   data.forEach(function(d) {
     d.male = +d.male;
   });
 
-  // append a group
   var g = svg.selectAll(".arc")
       .data(pie(data))
     .enter().append("g")
@@ -63,8 +63,7 @@ d3.csv("data.csv", function(error, data) {
         tooltip.transition()
           .duration(200)
           .style("opacity", .9);
-        
-          tooltip.html(d.data.reason_for_migration + "<br/>" + d.data.male)
+        tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Male: " + d.data.male)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -74,18 +73,11 @@ d3.csv("data.csv", function(error, data) {
           .style("opacity", 0);
       });
 
-  // append path, the pie for each age
   g.append("path")
       .attr("d", arc)
       .style("fill", function(d) { return color(d.data.reason_for_migration); });
-
-  // add text
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.data.reason_for_migration; });
-
 });
 
 </script>
+</body>
+</html>
