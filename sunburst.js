@@ -7,7 +7,7 @@ function init(){
         const data = convertCSVToHierarchy(csvData);
 
         // Define chart dimensions
-        const width = 800;
+        const width = 600;
         const height = 600;
         const radius = Math.min(width, height) / 2;
 
@@ -54,17 +54,7 @@ function init(){
             .attr('d', arc)
             .style('fill', d => d.depth === 0 ? 'none' : d.depth === 1 ? yearColor(d.data.name) : ageColor(d.parent.children.indexOf(d)))
             .on('mouseover', handleMouseOver) // Add mouseover event listener
-            .on('mouseout', handleMouseOut)   // Add mouseout event;
-            //.append("title") // Add a title element for the tooltip
-            //.text(d => `${d.data.name} (${d.value})`);
-        
-            /*
-        g.append("title")
-            .text(d => `${d.data.name} (${d.value})`);
-        
-        g.append("tooltip")
-            .text(d => `${d.data.name} (${d.value})`);
-        */
+            .on('mouseout', handleMouseOut);   // Add mouseout event;
 
         // Add text labels for years only
         g.filter(d => d.depth === 1) // Filter to only apply to year elements
@@ -73,16 +63,34 @@ function init(){
             .attr('dy', '0.35em')
             .attr('text-anchor', 'middle')
             .text(d => d.data.name);
+            
+        
+    // Create an age group legend
+    const legendContainer = d3.select('#legend');
+
+    const ageLegend = legendContainer.append('div')
+        .attr('class', 'legend')
+        .html('<strong>Age Group Legend</strong>');
+
+    const ageEntries = ageLegend.selectAll('.legend-entry')
+        .data(data.children[0].children) // Assuming the first year has all age groups
+        .enter().append('div')
+        .attr('class', 'legend-entry');
+
+    ageEntries.append('div')
+        .attr('class', 'legend-color')
+        .style('background-color', (d, i) => ageColor(i));
+
+    ageEntries.append('div')
+        .attr('class', 'legend-label')
+        .text(d => d.name);
+
 
     /*********************** mouse over & mouse out ***********************/
 
     let originalFillColor;
     function handleMouseOver(d) {
 
-        console.log(d); // Log the entire data object
-    console.log(d.data); // Log d.data
-    console.log(d.parent); // Log d.parent
-    console.log(d.parent && d.parent.data); 
         // Define behavior when mouse hovers over a segment
         // For example, you can change the color or display additional information
 
@@ -164,9 +172,6 @@ function init(){
     
         return hierarchyData;
     }
-    
-
-    
 }
 
 window.onload = init;

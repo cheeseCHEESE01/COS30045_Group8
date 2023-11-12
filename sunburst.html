@@ -8,6 +8,32 @@
 </head>
 
 <style>
+
+.all {
+    width: 100%;
+    height: 700px;
+}
+
+.left {
+    margin: auto;
+    width: 75%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right {
+    width: 15%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 #chart {
     max-width: 800px;
     margin: 0 auto;
@@ -15,8 +41,7 @@
         
 #tooltip {
         position: absolute;
-        left: 45%;
-        top: 35%;
+        margin: auto;
         background-color: none;
         text-align: center;
         padding: 20px;
@@ -30,15 +55,50 @@
     color: black;
 }
 
+.legend {
+    margin-bottom: 20px;
+}
+
+.legend strong {
+    font-size: 18px;
+    text-decoration: underline; 
+}
+
+
+.legend-entry {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.legend-color {
+    width: 60px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.legend-label {
+    font-size: 14px;
+}
+
         
 </style>
 
 <body>
-    <script src="sunburst.js"></script> 
-    <div id="chart"></div>
-    <div id="tooltip" class="tooltip">
-        <div id="info" class="info"></div>
-    </div>
+    <script src="sunburst.js"></script>
+    <div class="all">
+        <div class="left">
+            <div id="chart"></div>
+            <div id="tooltip" class="tooltip">
+                <div id="info" class="info"></div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div id="legend"></div>
+        </div>
+    </div> 
+    
    
 </body>
 </html>
