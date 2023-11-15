@@ -4,8 +4,15 @@
 </header>
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="nav.css" />
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <style>
+
+body {
+  background-color: #e7eff5;
+
+}
 
 .active-state {
   fill: yellow !important; /* Override any other styles */
@@ -25,11 +32,20 @@ div.tooltip {
 }
 
 #map {
-  width: 70%;
+  width: 100%;
   border: 2px solid green;
   margin-top: 20px;
   float: left;
+}
 
+.left-clmn {
+  width: 65%;
+  float: left;
+  padding-left: 10px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #right-clmn {
@@ -115,7 +131,28 @@ th {
 </style>
 </head>
 <body>
-  <!-- Add buttons for filtering -->
+  <div class="sidenav">
+    <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
+
+    <div class="items">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="choropleth_map.html">Unemployement</a></li>
+          <li><a href="heatmap.html">Wages</a></li>
+          <li><a href="sunburst.html">Population</a></li>
+          <li><a href="pie_chart.html">Reason</a></li>
+          <li><a href="#">Disease</a></li>
+          <li><a href="bubble_chart.html">Immigration</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+  const btn = document.querySelector(".navbtn");
+    btn.addEventListener("click",()=>{
+    document.body.classList.toggle("active")
+    })
+</script>
 
   <div class="Title">
     <h1>Unemployement Rate in India State</h1>
@@ -123,7 +160,9 @@ th {
   </div>
 
   <div class="map-row">
-  <div id="map"></div>
+    <div class="left-clmn">
+      <div id="map"></div>
+    </div>
   <div id="right-clmn">
     <div id="inner"></div>
     <div class="selectState">You are selected :
@@ -150,7 +189,7 @@ th {
     //let margin = {top: 10, right: 20, bottom: 10, left: 450};
     let margin = {top: 0, right: 0, bottom: 0, left: 0};
 
-    let width = 1000 - margin.left - margin.right;
+    let width = 925 - margin.left - margin.right;
     let height = 650 - margin.top - margin.bottom;
     
     let svg = d3.select("#map").append("svg")

@@ -8,7 +8,7 @@ function init(){
         const data = convertCSVToHierarchy(csvData);
 
 
-        /*******************(******** Table **************************/
+        /*************************** Table **************************/
         
         // Define showTableByAgeGroup within the init function
         showTableByAgeGroup = function(ageGroup) {
