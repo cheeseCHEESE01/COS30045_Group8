@@ -17,6 +17,65 @@ body {
   background-color: #dedede;
 }
 
+.all {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-image: url(https://images.idgesg.net/images/article/2020/08/united_states_usa_currency_money_banknotes_coins_finance_budget_salary_salaries_funding_costs_expenses_profit_revenue_payment_by_andrei_barmashov_gettyimages-1253168184_2400x1600-100854937-large.jpg?auto=webp&quality=85,70);
+}
+
+
+
+.details {
+  width: 100%;
+  height: 800px;
+  display: flex;
+  
+}
+
+.paragraph {
+  width: 83%;
+  height: auto;
+  background-color: #616161d3;
+  padding: 50px;
+  margin: auto;
+}
+
+h1 { 
+  color: #fff; 
+  font-family: 'Righteous', cursive; 
+  font-size: 65px; 
+  font-weight: normal; 
+  line-height: 60px; 
+  margin: 10px 0 50px 0; 
+  text-transform: uppercase; 
+  text-shadow: 2px 2px 0 #000; /*,margin: 10px 0 24px;*/ 
+  text-align: center; 
+}
+
+
+h2 { 
+  font-size: 30px; 
+  letter-spacing: -1px; 
+  color: #DFBF84; 
+  text-transform: uppercase; 
+  text-shadow: 1px 1px 0 #000;
+  margin: 10px 0 24px; 
+  text-align: center; 
+  line-height: 50px; 
+}
+
+p { 
+  color: #f6f6f6; 
+  font-family: 'Orienta', sans-serif; 
+  font-size: 16px; 
+  line-height: 24px; 
+  margin: 0 0 24px; 
+  text-align: justify; 
+}
+
+
+
 @keyframes heatmapAnimation {
   from {
     opacity: 0;
@@ -26,6 +85,20 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.H-chart {
+  width: 100%;
+  height: auto;
+  padding-bottom: 50px;
+}
+
+.inner-chart {
+  width: 90%;
+  margin: auto;
+  background-color: #a5aeaee1;
+  padding: 0 0 20px 0;
+  box-shadow: 0 0 50px #000;
 }
 
 .heatmap-rect {
@@ -44,6 +117,7 @@ body {
   pointer-events: none;
   color: #231a1a;
   border-width: 3px;
+  transform: translate(110px,820px);
 }
 
 .top {
@@ -52,14 +126,17 @@ body {
 }
 
 .LH {
-  width: 70%;
+  width: 80%;
   height: 100%;
   float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .RH {
-  width: 30%;
-  float: left;
+  width: 20%;
+  float: right;
   height: 100%;
 }
 
@@ -71,7 +148,9 @@ body {
 }
 
 .button-container {
-    clear: both; /* This will ensure that the buttons start on a new line */
+  width: 100%;
+  height: auto;
+  clear: both; /* This will ensure that the buttons start on a new line */
 }
 
 table {
@@ -79,12 +158,14 @@ table {
   border-collapse: collapse;
   width: 80%;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.19);
+  margin: auto;
 }
 
 td, th {
   border: 1px solid #111111;
   text-align: left;
   padding: 8px;
+  background-color: #dedede;
 }
 
 th {
@@ -97,10 +178,10 @@ tr:hover {
 }
 
 .filterButton {
-  width: 150px;
+  margin: 0 0 0 15px;
+  width: 143px;
   height: 50px;
   font-size: 15px;
-  margin-bottom: 20px;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -121,8 +202,14 @@ tr:hover {
   height: auto;
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 20px 0;
   text-decoration: underline;
+  text-align: center;
+}
+
+.c-text {
+  padding: 50px 50px 0 50px;
+  color: #000;
 }
 
 </style>
@@ -153,12 +240,41 @@ const btn = document.querySelector(".navbtn");
   })
 </script>
 
-<div class="details">
+<div class="all">
+  <div class="a_info">
+  <div class="details">
+  <div class="paragraph">
+    <h2>Heatmap Chart</h2>
+    <h1>Monthly Wages of Various Country</h1>
+    <p>
+      Employment constitutes a fundamental aspect of our human livelihoods and existence and it serves as the bedrock for maintaining our basic living conditions. 
+      Importantly, salary level significantly influences the overall quality of life, impacting not only our personal well-being but also shaping the circumstances 
+      in which our families thrive. 
+    </p>
+      
+    <p>
+      In India, disparities in wage levels, combined with certain drawbacks, lead people to consider migration as a route towards a more promising future and an 
+      enhanced quality of life. Furthermore, when juxtaposed with nations like Belgium, Austria, Italy, and Germany, India's comparatively lower wages, particularly 
+      within specific industries, may present obstacles in keeping up with the increasing cost of living and attaining financial objectives. Additionally, the 
+      difference in salaries for the same occupation compared to other countries creates financial concerns, which can contribute to individuals experiencing 
+      psychological imbalances.
+    </p>
 
+    <p>
+      Hence, in the pursuit of high-paying employment, improved work-life balance, and the chance to enhance their standard of living, individuals in India opt for 
+      migration to explore economic opportunities abroad. Despite recognizing the sacrifices and challenges embedded in the immigration process, the potential for 
+      long-term personal and professional development motivates many to seek a future beyond their home country.
+    </p>
+  </div>
 </div>
 
 <div class="H-chart">
-  <div class="top">
+  <div class="inner-chart">
+    <p class="c-text">
+      Below is the data visualization of the wages of various countries.
+      Monitoring wage changes across various countries provides valuable insights into the dynamics of compensation globally. This process allows us to discern subtle differences in pay structures from one country to another. The availability of disaggregated wage statistics facilitates the evaluation, observation, and analysis of these changes. This wealth of data enables people to grasp the economic status of different countries and assess their viability for immigration.
+    </p>
+    <div class="top">
   <div class="LH">
     <div id="my_dataviz"></div>
   </div>
@@ -182,8 +298,10 @@ const btn = document.querySelector(".navbtn");
   <div id="table_Country"></div>
 </div>
 </div>
-
-
+</div>
+</div>
+  </div>
+  
 <script>
 
   // set the dimensions and margins of the graph
