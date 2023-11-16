@@ -13,6 +13,75 @@
 
 <style>
 
+.details {
+    width: auto;
+    height: auto; /* 100% of the viewport height */
+    position: relative;
+    background-image: url('https://img.freepik.com/free-photo/paper-style-earth-globe-with-silhouettes_23-2149377729.jpg?w=996&t=st=1700148907~exp=1700149507~hmac=8071392e2ea3c1329be328a72e14c3cbdcaf8f567532812bac3de6b91f01beea');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Fix the background image when scrolling */
+    overflow: hidden; /* Hide overflow to prevent scrollbars */
+}
+
+
+
+.cover {
+    width: 100%;
+    height: auto;
+    background-color: #fae6e69f;
+}
+
+h1 { 
+    color: #111; 
+    font-family: 'Open Sans Condensed', sans-serif; 
+    font-size: 64px; 
+    font-weight: 700; 
+    line-height: 64px; 
+    margin: 0 0 0; 
+    padding: 20px 30px; 
+    text-align: center; 
+    text-transform: uppercase; 
+    margin-bottom: 40px;
+}
+
+
+h2 { 
+    color: #111; 
+    font-family: 'Open Sans Condensed', sans-serif; 
+    font-size: 45px; 
+    font-weight: 700; 
+    line-height: 48px; 
+    margin: 80px 0; 
+    padding: 0 30px; 
+    text-align: center; 
+    text-transform: uppercase; 
+}
+
+p { 
+    color: #111; 
+    font-family: 'Open Sans', sans-serif; 
+    font-size: 16px; 
+    line-height: 28px; 
+    margin: 0 0 48px; 
+}
+
+.line { 
+    border-top: 3px solid #111; 
+    display: block; margin-top: 60px; 
+    padding-top: 50px; position: relative; }
+
+.chartname { text-align: center; font-size: 18px; }
+
+.p-t {
+    width: 80%;
+    margin: auto;
+    text-align: justify;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .all {
     width: 100%;
     height: 700px;
@@ -91,7 +160,9 @@ table {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.19);
-    margin: 20px 0;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 th, td {
@@ -106,6 +177,10 @@ th {
     color: #fff5f5;
 }
 
+tr {
+    background-color: #fff4fd;
+}
+
 tr:hover {
     background-color: #f1e3ef;
 }
@@ -113,7 +188,7 @@ tr:hover {
 .btn {
     display: inline-block;
     padding: 15px 25px;
-    margin: 5px;
+    margin: 10px 0 10px 14px;
     font-size: 14px;
     text-align: center;
     text-decoration: none;
@@ -136,6 +211,8 @@ tr:hover {
 <body>
     <script src="sunburst.js"></script>
 
+    <div class="details">
+        <div class="cover">
     <div class="sidenav">
         <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
     
@@ -158,6 +235,53 @@ tr:hover {
         document.body.classList.toggle("active")
         })
     </script>
+
+        <div class="paragraph">
+            <div class="title">
+          <span class="line"></span>
+          <h1>Population of the India</h1>
+          <p class="chartname">Sunburst Chart</p>
+          <span class="line"></span>
+        </div>
+
+          <p class="p-t">
+            The rapid growth of India's population has propelled it to the position of the world's most populous country. However, this demographic surge has also ushered 
+            in a myriad of challenges, with housing emerging as a prominent concern. According to a 2020 study conducted by the Indian Council for Research on 
+            International Economic Relations (ICRIER), India's urban housing shortage witnessed a stark escalation from 18.78 million households in 2012 to 29 million 
+            households in 2018, marking a substantial 54% increase. This shortage encompasses various housing inadequacies, including homelessness, dwellings that cannot 
+            be upgraded, outdated housing, and residences grappling with overcrowded living conditions.
+          </p>
+
+          <h2>Overpopulation's Impact on Housing Challenges</h2>
+
+          <p class="p-t">
+            In the capital city, New Delhi, home to 6.75 million people, a significant portion resides in impoverished housing within low-income settlements. These 
+            settlements comprise 695 slums, 1,797 illegal encampments, and 362 urban villages. The impoverished populace, lacking the financial means to acquire or 
+            construct homes independently, often dwells in ancestral huts, rented accommodations from landlords, or government-provided housing. A substantial portion of 
+            the rural population resides in fragile kaccha and semi-pucca houses, characterized by mud walls, thatch roofs, and a lack of toilet facilities. Consequently, 
+            the reliance on village public toilets becomes a necessity.
+          </p>
+      
+          <p class="p-t">
+            Moreover, the huts in many villages are not only diminutive but also densely packed, lining narrow lanes. Open drainage systems, susceptible to clogging, 
+            meander through these alleys, providing a breeding ground for mosquitoes. Compounding the issue, numerous families, often with four or more members, inhabit a 
+            single hut. Therefore, according to interviews with impoverished Indian women, the significance of housing transcends even basic necessities like food, 
+            healthcare, and education. They recognize that a secure and comfortable home is pivotal for escaping the hardships of poverty and maintaining their health.
+          </p>
+
+          <p class="p-t">
+            However, overcrowded living spaces contribute to substandard and cramped conditions, compromising sanitation and overall housing quality. These factors 
+            significantly impact the health and well-being of residents. Faced with these challenges, many individuals and families make the difficult decision to migrate. 
+            Migration becomes a means of seeking improved living conditions, economic opportunities, and a chance for a better quality of life beyond the confines of their 
+            current circumstances. The quest for better housing, livelihoods, and overall well-being propels individuals to explore opportunities in different regions or 
+            countries.
+          </p>
+
+          <p class="p-t">
+            Below is a data visualisation about the population of the India from 2017 to 2021. 
+          </p>
+        </div>
+      
     
     <div class="all">
         <div class="left">
@@ -187,7 +311,7 @@ tr:hover {
     </div>
 
     <div id="table-container"></div>
-
+</div></div>
    
 </body>
 </html>
