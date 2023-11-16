@@ -1,6 +1,6 @@
 <html>
 <header>
-<title>Unemployement Rate in India State</title>
+<title>Unemployment Rate of 2023 in India State</title>
 </header>
 <head>
 <meta charset="utf-8">
@@ -8,10 +8,33 @@
 <link rel="stylesheet" href="nav.css" />
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <style>
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-body {
-  background-color: #e7eff5;
+h1 { color: #fff; 
+  font-size: 65px; font-weight: normal; 
+  line-height: 60px; margin: 10px 0 0px 0; 
+  text-transform: uppercase; text-shadow: 2px 2px 0 #000; 
+  margin: 10px 0 24px; text-align: center; 
+}
 
+
+h2 { 
+  font-family: 'Righteous', cursive; 
+  font-size: 30px; letter-spacing: -1px; 
+  color: #DFBF84; text-transform: uppercase; 
+  text-shadow: 1px 1px 0 #000; margin: 10px 0 24px; 
+  text-align: center; line-height: 50px; 
+}
+
+
+p { 
+  color: #f6f6f6; font-family: 'Orienta', sans-serif; 
+  font-size: 16px; line-height: 24px; margin: 10px 0 24px; 
+  text-align: center; 
 }
 
 .active-state {
@@ -33,9 +56,10 @@ div.tooltip {
 
 #map {
   width: 100%;
-  border: 2px solid green;
+  box-shadow: 0 0 30px #111111;
   margin-top: 20px;
   float: left;
+  background-color: #f0f0f0;
 }
 
 .left-clmn {
@@ -49,9 +73,10 @@ div.tooltip {
 }
 
 #right-clmn {
-  width: 29%;
+  width: 30%;
   float: left;
-  padding-left: 10px;
+  
+  padding-left: 50px;
 }
 
 .legend {
@@ -75,6 +100,33 @@ div.tooltip {
 .btn {
   margin: 0 2px;
   padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #CD5C5C;
+  color: #293043;
+  border-radius: 4px;
+  background-color: #FFA07A; 
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #CD5C5C;
+  color: #fff;
+}
+
+.searchb {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid #CD5C5C;
+  background-color: #FFA07A; 
+}
+
+.searchb:hover {
+  background-color: #CD5C5C;
+  color: #fff;
+}
+
+#percentageToCheck {
+  padding: 5px 10px;
 }
 
 #maptext {
@@ -89,7 +141,6 @@ div.tooltip {
   padding: 10px 30px;
 }
 
-
 .selectState {
   margin: 0 0 10px 0;
 }
@@ -102,18 +153,23 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  margin: auto;
 }
 
 td, th {
-  border: 2px solid #111111;
+  border: 2px solid #E9967A;
   text-align: left;
   padding: 1.5px;
   font-size: 14px;
 }
 
 th {
-  background-color: #576978;
+  background-color: #CD5C5C;
   color: aliceblue;
+}
+
+tr {
+    background-color: #fff4fd;
 }
 
 .Title {
@@ -124,13 +180,39 @@ th {
   text-align: center;
 }
 
-.map-row {
+.info {
+  width: 60%;
+  height: auto;
+  background-color: #922B21;
+  margin: auto;
+  padding: 100px 150px;
+}
+
+.back {
   width: 100%;
+  height: auto; /* 100% of the viewport height */
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Fix the background image when scrolling */
+  overflow: hidden; /* Hide overflow to prevent scrollbars */
+  background-image: url(https://img.freepik.com/free-photo/unrecognizable-businesswoman-protesting-against-unemployment-holding-banner-with-need-work-inscription_637285-7223.jpg?w=996&t=st=1700161329~exp=1700161929~hmac=9dcd7d10ecb3629cb1fcbb2ccaa2a72726dd6da36f2b829428a40697fa5c5dc0);
+}
+
+.map-row {
+  margin-top: 50px;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 50px;
+  background-color: #f0f0f0b0; /* Choose your preferred background color */
+  padding: 20px; /* Adjust padding as needed */
 }
 
 </style>
 </head>
 <body>
+  <div class="back">
   <div class="sidenav">
     <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
 
@@ -155,12 +237,53 @@ th {
 </script>
 
   <div class="Title">
-    <h1>Unemployement Rate in India State</h1>
-    <h2>Migrasion because of </h2>
+    <div class="info">
+      <h2>Choropleth Map</h2>
+      <h1>Unemployment Rate of 2023 in India State</h1>
+
+      <p>
+        Unemployment poses a persistent and complex challenge in India, exhibiting variations across different regions and industries. Several factors contribute to 
+        the prevalence of unemployment, underscoring the multifaceted nature of the issue. Among the prominent causes are population growth and an educational 
+        mismatch.
+      </p>
+
+      <p>
+        India's large and continuously expanding population intensifies competition within the job market. The sheer volume of job seekers creates a demanding 
+        environment where securing employment becomes increasingly competitive. Unfortunately, the pace of job creation doesn't consistently align with the growth 
+        of the labour force, resulting in a significant segment of the Indian population grappling with unemployment.
+      </p>
+
+      <p>
+        The educational landscape further complicates the employment scenario. Many individuals in India do not pursue education beyond the primary level, leading to 
+        a deficiency in knowledge reserves. Moreover, this educational gap is compounded by a prevalent mismatch between the skills possessed by job applicants and 
+        those sought by employers. This mismatch becomes particularly pronounced among the youth, where insufficient educational attainment and a disparity in skill 
+        sets contribute substantially to the escalating rates of unemployment.
+      </p>
+
+      <p>
+        The inability to secure stable employment has profound consequences, precipitating economic hardships that result in a substantial decline in living standards 
+        for individuals in India. This challenging situation makes it increasingly difficult for them to meet fundamental needs such as housing, healthcare, and 
+        education. The nexus between unemployment and a decline in living standards underscores the pervasive impact on the overall well-being of the affected population.
+      </p>
+
+      <p>
+        As the unemployment rate rises, a noteworthy phenomenon emerges which is the large-scale migration of individuals seeking improved employment opportunities. 
+        Faced with limited prospects within India, people are compelled to explore better job markets in countries with more developed economies. 
+      </p>
+
+      <p>
+        The migration of individuals from India seeking better employment opportunities not only underscores the interdependence of the global economy but also 
+        accentuates the urgent need for India to formulate a comprehensive strategy to address unemployment. The following data visualization of India's unemployment 
+        rate across different regions serves as a valuable tool for analysis, observation, and understanding of prevailing trends. This data-driven approach empowers 
+        policymakers and stakeholders to derive insights and formulate targeted solutions, fostering the cultivation of a more resilient and prosperous India. By 
+        leveraging the insights gleaned from such visualizations, India can tailor interventions to address regional disparities, enhance skill development, and create 
+        an environment conducive to sustainable economic growth, ultimately mitigating the challenges posed by unemployment.
+      </p>
+    </div>
   </div>
 
   <div class="map-row">
-    <div class="left-clmn">
+      <div class="left-clmn">
       <div id="map"></div>
     </div>
   <div id="right-clmn">
@@ -177,13 +300,12 @@ th {
     <button onclick="applyFilter(11, 20)" class="btn">11-20%</button>
     <button onclick="applyFilter(21, 40)" class="btn">21% above</button>
     <button onclick="resetFilter()" class="btn">Reset</button>
-
-</div>
-
-  
-    <div id="filteredData"></div>
   </div>
-</div>
+    
+  <div id="filteredData"></div>
+  </div>
+    
+</div></div>
 
   <script>
     //let margin = {top: 10, right: 20, bottom: 10, left: 450};
@@ -231,7 +353,7 @@ th {
         .enter()
         .append('path')
           .attr('d', pathGenerator)
-          .attr("transform", "translate(0,50)")
+          .attr("transform", "translate(50,50)")
           .style("fill", function(d) {
             if(d.State == "Kerala") {
               return "red";
@@ -272,13 +394,6 @@ th {
 
           
           d3.select("#maptext").html(textContent); 
-          
-          svg.append("text")
-            .attr("x", x2)
-            .attr("y", y2)
-            .text(textContent)
-            .attr("transform", "translate(-200,50)")
-            .attr('class', 'dynamic-text');
 
           d3.select(this).classed("active-state", true);
             activeState = this;
