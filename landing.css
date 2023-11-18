@@ -375,6 +375,64 @@ button {
   margin-bottom: 0.5rem;
 }
 
+
+nav {
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease-out;
+  background-color: #132716a8;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 16px;
+  z-index: 99;
+
+  @media (min-width: 640px) {
+    padding: 16px 50px 30px 50px;
+  }
+}
+
+nav.is-hidden {
+  transform: translateY(-100%);
+}
+
+.list a {
+  color: inherit;
+  text-decoration: none;
+  color: #ffffff;
+  margin: auto;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    font-size: 17px;
+  }
+}
+
+.list {
+  margin: auto;
+  opacity: 1;
+  margin-top: 5px;
+
+  @media (min-width: 640px) {
+    display: flex;
+  }
+
+  li {
+    margin-left: 0px;
+  }
+}
+
+li {
+  margin: 0 20px;
+}
+
+/********************************************/
+
+
 @media screen and (min-width: 540px) {
   .ferncontext {
     width: 79%;

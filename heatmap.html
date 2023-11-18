@@ -1,5 +1,3 @@
-
-<!-- Code from d3-graph-gallery.com -->
 <!DOCTYPE html>
 <html>
 <header>
@@ -7,6 +5,11 @@
 </header>
 <head>
 <meta charset="utf-8">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="nav.css" />
+
 </head>
 <style>
 
@@ -14,11 +17,105 @@ body {
   background-color: #dedede;
 }
 
+.all {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-image: url(https://images.idgesg.net/images/article/2020/08/united_states_usa_currency_money_banknotes_coins_finance_budget_salary_salaries_funding_costs_expenses_profit_revenue_payment_by_andrei_barmashov_gettyimages-1253168184_2400x1600-100854937-large.jpg?auto=webp&quality=85,70);
+}
+
+.details {
+  width: 100%;
+  height: 800px;
+  display: flex;
+  
+}
+
+.paragraph {
+  width: 83%;
+  height: auto;
+  background-color: #616161d3;
+  padding: 50px;
+  margin: auto;
+}
+
+h1 { 
+  color: #fff; 
+  font-family: 'Righteous', cursive; 
+  font-size: 65px; 
+  font-weight: normal; 
+  line-height: 60px; 
+  margin: 10px 0 50px 0; 
+  text-transform: uppercase; 
+  text-shadow: 2px 2px 0 #000; /*,margin: 10px 0 24px;*/ 
+  text-align: center; 
+}
+
+
+h2 { 
+  font-size: 30px; 
+  letter-spacing: -1px; 
+  color: #DFBF84; 
+  text-transform: uppercase; 
+  text-shadow: 1px 1px 0 #000;
+  margin: 10px 0 24px; 
+  text-align: center; 
+  line-height: 50px; 
+}
+
+p { 
+  color: #f6f6f6; 
+  font-family: 'Orienta', sans-serif; 
+  font-size: 16px; 
+  line-height: 24px; 
+  margin: 0 0 24px; 
+  text-align: justify; 
+}
+
+
+
+@keyframes heatmapAnimation {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.H-chart {
+  width: 100%;
+  height: auto;
+  padding-bottom: 50px;
+}
+
+.inner-chart {
+  width: 90%;
+  margin: auto;
+  background-color: #a5aeaee1;
+  padding: 0 0 20px 0;
+  box-shadow: 0 0 50px #000;
+}
+
+.heatmap-rect {
+  position: relative;
+  animation: heatmapAnimation 1s ease forwards; /* 0.5s duration, ease timing, and forwards to keep the final state */
+}
+
+.heatmap-rect.show {
+  opacity: 1;
+  animation: none; /* Disable the animation when the heatmap is shown */
+}
+
+
 .tooltip {
   position: absolute;
   pointer-events: none;
   color: #231a1a;
   border-width: 3px;
+  transform: translate(110px,820px);
 }
 
 .top {
@@ -27,14 +124,17 @@ body {
 }
 
 .LH {
-  width: 70%;
+  width: 80%;
   height: 100%;
   float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .RH {
-  width: 30%;
-  float: left;
+  width: 20%;
+  float: right;
   height: 100%;
 }
 
@@ -46,31 +146,53 @@ body {
 }
 
 .button-container {
-    clear: both; /* This will ensure that the buttons start on a new line */
+  width: 100%;
+  height: auto;
+  clear: both; /* This will ensure that the buttons start on a new line */
 }
 
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 50%;
+  width: 80%;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.19);
+  margin: auto;
 }
 
 td, th {
   border: 1px solid #111111;
   text-align: left;
   padding: 8px;
+  background-color: #dedede;
 }
 
 th {
-  background-color: #576978;
+  background-color: #155691;
   color: aliceblue;
 }
 
+tr:hover {
+    background-color: #b1d3eb;
+}
+
 .filterButton {
-  width: 150px;
-  height: 40px;
+  margin: 0 0 0 15px;
+  width: 143px;
+  height: 50px;
   font-size: 15px;
-  margin-bottom: 20px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #155691;
+  color: #293043;
+  border-radius: 4px;
+  background-color: #e4edf4; 
+  transition: background-color 0.3s;
+}
+
+.filterButton:hover {
+  background-color: #659EC7;
+  color: #fff;
 }
 
 #C-name {
@@ -78,8 +200,14 @@ th {
   height: auto;
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 20px 0;
   text-decoration: underline;
+  text-align: center;
+}
+
+.c-text {
+  padding: 50px 50px 0 50px;
+  color: #000;
 }
 
 </style>
@@ -87,7 +215,64 @@ th {
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 
-<div class="top">
+<div class="sidenav">
+  <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
+
+  <div class="items">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="choropleth_map.html">Unemployement</a></li>
+        <li><a href="heatmap.html">Wages</a></li>
+        <li><a href="sunburst.html">Population</a></li>
+        <li><a href="pie_chart.html">Reason</a></li>
+        <li><a href="#">Disease</a></li>
+        <li><a href="bubble_chart.html">Immigration</a></li>
+      </ul>
+  </div>
+</div>
+
+<script>
+const btn = document.querySelector(".navbtn");
+  btn.addEventListener("click",()=>{
+  document.body.classList.toggle("active")
+  })
+</script>
+
+<div class="all">
+  <div class="a_info">
+  <div class="details">
+  <div class="paragraph">
+    <h2>Heatmap Chart</h2>
+    <h1>Monthly Wages of Various Country</h1>
+    <p>
+      Employment constitutes a fundamental aspect of our human livelihoods and existence and it serves as the bedrock for maintaining our basic living conditions. 
+      Importantly, salary level significantly influences the overall quality of life, impacting not only our personal well-being but also shaping the circumstances 
+      in which our families thrive. 
+    </p>
+      
+    <p>
+      In India, disparities in wage levels, combined with certain drawbacks, lead people to consider migration as a route towards a more promising future and an 
+      enhanced quality of life. Furthermore, when juxtaposed with nations like Belgium, Austria, Italy, and Germany, India's comparatively lower wages, particularly 
+      within specific industries, may present obstacles in keeping up with the increasing cost of living and attaining financial objectives. Additionally, the 
+      difference in salaries for the same occupation compared to other countries creates financial concerns, which can contribute to individuals experiencing 
+      psychological imbalances.
+    </p>
+
+    <p>
+      Hence, in the pursuit of high-paying employment, improved work-life balance, and the chance to enhance their standard of living, individuals in India opt for 
+      migration to explore economic opportunities abroad. Despite recognizing the sacrifices and challenges embedded in the immigration process, the potential for 
+      long-term personal and professional development motivates many to seek a future beyond their home country.
+    </p>
+  </div>
+</div>
+
+<div class="H-chart">
+  <div class="inner-chart">
+    <p class="c-text">
+      Below is the data visualization of the wages of various countries.
+      Monitoring wage changes across various countries provides valuable insights into the dynamics of compensation globally. This process allows us to discern subtle differences in pay structures from one country to another. The availability of disaggregated wage statistics facilitates the evaluation, observation, and analysis of these changes. This wealth of data enables people to grasp the economic status of different countries and assess their viability for immigration.
+    </p>
+    <div class="top">
   <div class="LH">
     <div id="my_dataviz"></div>
   </div>
@@ -110,7 +295,11 @@ th {
   <div id="C-name"></div>
   <div id="table_Country"></div>
 </div>
-
+</div>
+</div>
+</div>
+  </div>
+  
 <script>
 
   // set the dimensions and margins of the graph
@@ -127,6 +316,9 @@ th {
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
   
+  d3.selectAll(".heatmap-rect")
+  .classed("heatmap-transition", true);
+
 /**************************************/
 
   // Build X scales and axis:
@@ -263,7 +455,7 @@ var myColor10 = d3.scaleLinear()
     tooltip
       .html("<b><h3>" + d.country_name + 
       "</h3></b><br> Country code: " + d.country_code + "<br>Year: " + d.year + 
-      "<br>Monly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hour_wages)
+      "<br>Monthly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hour_wages)
       .style("left", (d3.mouse(this)[0]+70) + "px")
       .style("top", (d3.mouse(this)[1]) + "px");
   }
@@ -277,12 +469,16 @@ var myColor10 = d3.scaleLinear()
 
   var activeBox = null; // Initialize active state variable
 
+  // Add a class to show heatmap rectangles with fade-in animation
+  d3.selectAll(".heatmap-rect").classed("show", true);
+
   
     // add the squares
   svg.selectAll()
     .data(data)
     .enter()
     .append("rect")
+    .attr("id", "heatmap-rect") 
     .attr("x", function(d) { return x(d.country_name) })
     .attr("y", function(d) { return y(d.year) })
     .attr("width", x.bandwidth() )
@@ -348,6 +544,7 @@ function displayAllSquares() {
     .data(data)  // Use the original data
     .enter()
     .append("rect")
+    .attr("class", "heatmap-rect") 
     .attr("x", function(d) { return x(d.country_name) })
     .attr("y", function(d) { return y(d.year) })
     .attr("width", x.bandwidth() )
@@ -396,6 +593,7 @@ function updateHeatmap(filteredData) {
       .data(filteredData)
       .enter()
       .append("rect")
+      .attr("class", "heatmap-rect") 
       .attr("x", function(d) { return x(d.country_name) })
       .attr("y", function(d) { return y(d.year) })
       .attr("width", x.bandwidth() )

@@ -4,10 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sunburst Chart</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="nav.css" />
 </head>
 
 <style>
+
+.details {
+    width: auto;
+    height: auto; /* 100% of the viewport height */
+    position: relative;
+    background-image: url('https://img.freepik.com/free-photo/paper-style-earth-globe-with-silhouettes_23-2149377729.jpg?w=996&t=st=1700148907~exp=1700149507~hmac=8071392e2ea3c1329be328a72e14c3cbdcaf8f567532812bac3de6b91f01beea');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Fix the background image when scrolling */
+    overflow: hidden; /* Hide overflow to prevent scrollbars */
+}
+
+
+
+.cover {
+    width: 100%;
+    height: auto;
+    background-color: #fae6e69f;
+}
+
+h1 { 
+    color: #111; 
+    font-family: 'Open Sans Condensed', sans-serif; 
+    font-size: 64px; 
+    font-weight: 700; 
+    line-height: 64px; 
+    margin: 0 0 0; 
+    padding: 20px 30px; 
+    text-align: center; 
+    text-transform: uppercase; 
+    margin-bottom: 40px;
+}
+
+
+h2 { 
+    color: #111; 
+    font-family: 'Open Sans Condensed', sans-serif; 
+    font-size: 45px; 
+    font-weight: 700; 
+    line-height: 48px; 
+    margin: 80px 0; 
+    padding: 0 30px; 
+    text-align: center; 
+    text-transform: uppercase; 
+}
+
+p { 
+    color: #111; 
+    font-family: 'Open Sans', sans-serif; 
+    font-size: 16px; 
+    line-height: 28px; 
+    margin: 0 0 48px; 
+}
+
+.line { 
+    border-top: 3px solid #111; 
+    display: block; margin-top: 60px; 
+    margin-bottom: 50px; position: relative; }
+
+.chartname { text-align: center; font-size: 18px; }
+
+.p-t {
+    width: 80%;
+    margin: auto;
+    text-align: justify;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.all {
+    width: 100%;
+    height: 700px;
+}
+
+.left {
+    margin: auto;
+    width: 75%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right {
+    width: 15%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 #chart {
     max-width: 800px;
     margin: 0 auto;
@@ -15,8 +114,7 @@
         
 #tooltip {
         position: absolute;
-        left: 45%;
-        top: 35%;
+        margin: auto;
         background-color: none;
         text-align: center;
         padding: 20px;
@@ -30,15 +128,190 @@
     color: black;
 }
 
+.legend {
+    margin-bottom: 20px;
+}
+
+.legend strong {
+    font-size: 18px;
+    text-decoration: underline; 
+}
+
+
+.legend-entry {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.legend-color {
+    width: 60px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.legend-label {
+    font-size: 14px;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.19);
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #b6b5b5;
+}
+
+th {
+    background-color: #43293e;
+    font-weight: bold;
+    color: #fff5f5;
+}
+
+tr {
+    background-color: #fff4fd;
+}
+
+tr:hover {
+    background-color: #f1e3ef;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 25px;
+    margin: 10px 0 10px 14px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #241a22;
+    color: #43293e;
+    border-radius: 4px;
+    background-color: #f1e3ef;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #534653;
+    color: #fff;
+}
+
         
 </style>
 
 <body>
-    <script src="sunburst.js"></script> 
-    <div id="chart"></div>
-    <div id="tooltip" class="tooltip">
-        <div id="info" class="info"></div>
+    <script src="sunburst.js"></script>
+
+    <div class="details">
+        <div class="cover">
+    <div class="sidenav">
+        <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
+    
+        <div class="items">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="choropleth_map.html">Unemployement</a></li>
+              <li><a href="heatmap.html">Wages</a></li>
+              <li><a href="sunburst.html">Population</a></li>
+              <li><a href="pie_chart.html">Reason</a></li>
+              <li><a href="#">Disease</a></li>
+              <li><a href="bubble_chart.html">Immigration</a></li>
+            </ul>
+        </div>
     </div>
+    
+    <script>
+      const btn = document.querySelector(".navbtn");
+        btn.addEventListener("click",()=>{
+        document.body.classList.toggle("active")
+        })
+    </script>
+
+        <div class="paragraph">
+            <div class="title">
+          <span class="line"></span>
+          <h1>Population of the India</h1>
+          <p class="chartname">Sunburst Chart</p>
+          <span class="line"></span>
+        </div>
+
+          <p class="p-t">
+            The rapid growth of India's population has propelled it to the position of the world's most populous country. However, this demographic surge has also ushered 
+            in a myriad of challenges, with housing emerging as a prominent concern. According to a 2020 study conducted by the Indian Council for Research on 
+            International Economic Relations (ICRIER), India's urban housing shortage witnessed a stark escalation from 18.78 million households in 2012 to 29 million 
+            households in 2018, marking a substantial 54% increase. This shortage encompasses various housing inadequacies, including homelessness, dwellings that cannot 
+            be upgraded, outdated housing, and residences grappling with overcrowded living conditions.
+          </p>
+
+          <h2>Overpopulation's Impact on Housing Challenges</h2>
+
+          <p class="p-t">
+            In the capital city, New Delhi, home to 6.75 million people, a significant portion resides in impoverished housing within low-income settlements. These 
+            settlements comprise 695 slums, 1,797 illegal encampments, and 362 urban villages. The impoverished populace, lacking the financial means to acquire or 
+            construct homes independently, often dwells in ancestral huts, rented accommodations from landlords, or government-provided housing. A substantial portion of 
+            the rural population resides in fragile kaccha and semi-pucca houses, characterized by mud walls, thatch roofs, and a lack of toilet facilities. Consequently, 
+            the reliance on village public toilets becomes a necessity.
+          </p>
+      
+          <p class="p-t">
+            Moreover, the huts in many villages are not only diminutive but also densely packed, lining narrow lanes. Open drainage systems, susceptible to clogging, 
+            meander through these alleys, providing a breeding ground for mosquitoes. Compounding the issue, numerous families, often with four or more members, inhabit a 
+            single hut. Therefore, according to interviews with impoverished Indian women, the significance of housing transcends even basic necessities like food, 
+            healthcare, and education. They recognize that a secure and comfortable home is pivotal for escaping the hardships of poverty and maintaining their health.
+          </p>
+
+          <p class="p-t">
+            However, overcrowded living spaces contribute to substandard and cramped conditions, compromising sanitation and overall housing quality. These factors 
+            significantly impact the health and well-being of residents. Faced with these challenges, many individuals and families make the difficult decision to migrate. 
+            Migration becomes a means of seeking improved living conditions, economic opportunities, and a chance for a better quality of life beyond the confines of their 
+            current circumstances. The quest for better housing, livelihoods, and overall well-being propels individuals to explore opportunities in different regions or 
+            countries.
+          </p>
+
+          <p class="p-t">
+            Below is a data visualisation about the population of the India from 2017 to 2021. 
+          </p>
+        </div>
+      
+    
+    <div class="all">
+        <div class="left">
+            <div id="chart"></div>
+            <div id="tooltip" class="tooltip">
+                <div id="info" class="info"></div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div id="legend"></div>
+        </div>
+    </div> 
+    <div id="filter-buttons">
+        <button onclick="showTableByAgeGroup('Age0-18')" class="btn">Age 0-18</button>
+        <button onclick="showTableByAgeGroup('Age19-30')" class="btn">Age 19-30</button>
+        <button onclick="showTableByAgeGroup('Age31-40')" class="btn">Age 31-40</button>
+        <button onclick="showTableByAgeGroup('Age41-50')" class="btn">Age 41-50</button>
+        <button onclick="showTableByAgeGroup('Age51-60')" class="btn">Age 51-60</button>
+        <button onclick="showTableByAgeGroup('Age60-70')" class="btn">Age 60-70</button>
+        <button onclick="showTableByAgeGroup('Age71-80')" class="btn">Age 71-80</button>
+        <button onclick="showTableByAgeGroup('Age81-90')" class="btn">Age 81-90</button>
+        <button onclick="showTableByAgeGroup('Age91-99')" class="btn">Age 91-99</button>
+        <button onclick="showTableByAgeGroup('Age 100+')" class="btn">Age 100+</button>
+        
+        <button onclick="resetFilter()" class="btn">Reset</button>
+    </div>
+
+    <div id="table-container"></div>
+</div></div>
    
 </body>
 </html>

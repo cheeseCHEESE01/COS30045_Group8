@@ -1,4 +1,5 @@
 function init(){
+    
     // Fetch the CSV file
     d3.csv('population.csv').then((csvData) => {
         //console.log(csvData);
@@ -6,8 +7,83 @@ function init(){
         // Convert CSV data to hierarchical structure
         const data = convertCSVToHierarchy(csvData);
 
+
+        /*************************** Table **************************/
+        
+        // Define showTableByAgeGroup within the init function
+        showTableByAgeGroup = function(ageGroup) {
+            // Check if csvData is defined and is an array
+            if (!Array.isArray(csvData)) {
+                console.error('Error: csvData is not defined or not an array.');
+                return;
+            }
+
+            // Assuming 'Age_Group' is a column in your CSV data
+            const filteredData = csvData.filter(row => row['Age_Group'] === ageGroup);
+
+            // Check if filteredData is defined and is an array
+            if (!Array.isArray(filteredData)) {
+                console.error('Error: filteredData is not defined or not an array.');
+                return;
+            }
+
+            console.log('Filtered Data:', filteredData); // Log the filtered data
+
+            const tableContainer = d3.select('#table-container');
+
+            // Clear existing table content
+            tableContainer.html('');
+
+            // Create a new table
+            const table = tableContainer.append('table');
+            const header = table.append('thead').append('tr');
+            header.selectAll('th')
+                .data(['Year', 'Age Group', 'Value'])
+                .enter().append('th')
+                .text(d => d);
+
+            const rows = table.append('tbody').selectAll('tr')
+                .data(filteredData)
+                .enter().append('tr');
+
+            rows.selectAll('td')
+                .data(d => Object.values(d))
+                .enter().append('td')
+                .text(d => d);
+
+            console.log('Showing table for age group:', ageGroup);
+        };
+
+        // Reset the filter and show the original table
+
+        window.resetFilter = function () {
+            const tableContainer = d3.select('#table-container');
+        
+            // Remove the entire table container
+            tableContainer.remove();
+        
+            console.log('Resetting filter');
+        
+            // Recreate the table container
+            createTableContainer();
+        };
+        
+        // Function to create the table container
+        function createTableContainer() {
+            const tableContainer = d3.select('body').append('div').attr('id', 'table-container');
+            console.log('Table container created');
+        
+        
+            // Add any additional logic to create the table within the container if needed
+        }
+        
+        
+
+        /*************************************************************/
+
+
         // Define chart dimensions
-        const width = 800;
+        const width = 600;
         const height = 600;
         const radius = Math.min(width, height) / 2;
 
@@ -54,17 +130,7 @@ function init(){
             .attr('d', arc)
             .style('fill', d => d.depth === 0 ? 'none' : d.depth === 1 ? yearColor(d.data.name) : ageColor(d.parent.children.indexOf(d)))
             .on('mouseover', handleMouseOver) // Add mouseover event listener
-            .on('mouseout', handleMouseOut)   // Add mouseout event;
-            //.append("title") // Add a title element for the tooltip
-            //.text(d => `${d.data.name} (${d.value})`);
-        
-            /*
-        g.append("title")
-            .text(d => `${d.data.name} (${d.value})`);
-        
-        g.append("tooltip")
-            .text(d => `${d.data.name} (${d.value})`);
-        */
+            .on('mouseout', handleMouseOut);   // Add mouseout event;
 
         // Add text labels for years only
         g.filter(d => d.depth === 1) // Filter to only apply to year elements
@@ -73,16 +139,36 @@ function init(){
             .attr('dy', '0.35em')
             .attr('text-anchor', 'middle')
             .text(d => d.data.name);
+            
+    
+    /************************** color legend ****************************/
 
+    // Create an age group legend
+    const legendContainer = d3.select('#legend');
+
+    const ageLegend = legendContainer.append('div')
+        .attr('class', 'legend')
+        .html('<strong>Age Group Legend</strong>');
+
+    const ageEntries = ageLegend.selectAll('.legend-entry')
+        .data(data.children[0].children) // Assuming the first year has all age groups
+        .enter().append('div')
+        .attr('class', 'legend-entry');
+
+    ageEntries.append('div')
+        .attr('class', 'legend-color')
+        .style('background-color', (d, i) => ageColor(i));
+
+    ageEntries.append('div')
+        .attr('class', 'legend-label')
+        .text(d => d.name);
+
+    
     /*********************** mouse over & mouse out ***********************/
 
     let originalFillColor;
     function handleMouseOver(d) {
 
-        console.log(d); // Log the entire data object
-    console.log(d.data); // Log d.data
-    console.log(d.parent); // Log d.parent
-    console.log(d.parent && d.parent.data); 
         // Define behavior when mouse hovers over a segment
         // For example, you can change the color or display additional information
 
@@ -164,9 +250,8 @@ function init(){
     
         return hierarchyData;
     }
-    
-
-    
 }
 
 window.onload = init;
+
+
