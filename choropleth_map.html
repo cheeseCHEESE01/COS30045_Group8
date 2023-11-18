@@ -389,7 +389,7 @@ tr {
 
           d3.selectAll('.dynamic-text').remove();
 
-          const textContent = `${d.State}: ${d.Unemployment_Percentage_in_2022}%`;
+          const textContent = `${d.State}: ${d.Unemployment_Percentage_in_2023}%`;
           const [x2, y2] = projection(d3.geoCentroid(d));
 
           
@@ -402,7 +402,7 @@ tr {
           .on("mouseover", function(d) {
             div.style("opacity", .9);		
             div.html("<b><span class='state-text'>" + d.State + "</span></b><br><br>" 
-            + d.Unemployment_Percentage_in_2022 + "%")
+            + d.Unemployment_Percentage_in_2023 + "%")
             
             .style("left", (d3.event.pageX) + "px")		
             .style("top", (d3.event.pageY - 28) + "px");
@@ -458,17 +458,17 @@ tr {
       india.selectAll('path')
         .data(languageData)
         .style("fill", function(d) {
-          let Unemployment_Percentage_in_2022 = d.Unemployment_Percentage_in_2022;
+          let Unemployment_Percentage_in_2023 = d.Unemployment_Percentage_in_2023;
           
-          return colorScale(Unemployment_Percentage_in_2022);
+          return colorScale(Unemployment_Percentage_in_2023);
           //let team = d.team;
-          /*if(Unemployment_Percentage_in_2022 >= 10) {
-            return orangeScale(Unemployment_Percentage_in_2022);
+          /*if(Unemployment_Percentage_in_2023 >= 10) {
+            return orangeScale(Unemployment_Percentage_in_2023);
           }
-          return greenScale(Unemployment_Percentage_in_2022);
+          return greenScale(Unemployment_Percentage_in_2023);
         });*/
 
-            //return greenScale(Unemployment_Percentage_in_2022);
+            //return greenScale(Unemployment_Percentage_in_2023);
           });
               
       
@@ -572,14 +572,14 @@ tr {
         if (minRange !== undefined && maxRange !== undefined) {
             // Filter by range
             filteredData = data.filter(function(d) {
-                let unemploymentPercentage = parseFloat(d.Unemployment_Percentage_in_2022);
+                let unemploymentPercentage = parseFloat(d.Unemployment_Percentage_in_2023);
                 return unemploymentPercentage >= minRange && unemploymentPercentage <= maxRange;
             });
         } else {
             // Filter by input value
             let filterValue = parseFloat(document.getElementById("percentageToCheck").value);
             filteredData = data.filter(function(d) {
-                return parseFloat(d.Unemployment_Percentage_in_2022) > filterValue;
+                return parseFloat(d.Unemployment_Percentage_in_2023) > filterValue;
             });
         }
 
@@ -592,7 +592,7 @@ tr {
             .style("fill", function(d) {
                 let stateData = filteredData.find(entry => entry.State === d.State);
                 if (stateData) {
-                    return colorScale(parseFloat(stateData.Unemployment_Percentage_in_2022));
+                    return colorScale(parseFloat(stateData.Unemployment_Percentage_in_2023));
                 } else {
                     return "gray"; // Default color for states not in filtered data
                 }
@@ -601,7 +601,7 @@ tr {
         // Update table
         let tableHTML = "<table><tr><th>State</th><th>Unemployment Percentage</th></tr>";
         filteredData.forEach(function(d) {
-            tableHTML += "<tr><td>" + d.State + "</td><td>" + d.Unemployment_Percentage_in_2022 + "%</td></tr>";
+            tableHTML += "<tr><td>" + d.State + "</td><td>" + d.Unemployment_Percentage_in_2023 + "%</td></tr>";
         });
         tableHTML += "</table>";
 
@@ -613,7 +613,7 @@ tr {
       d3.selectAll('path')
         .classed('filtered', false)
         .style("fill", function(d) {
-          return colorScale(d.Unemployment_Percentage_in_2022);
+          return colorScale(d.Unemployment_Percentage_in_2023);
         });
 
         document.getElementById("filteredData").innerHTML = ""; // This line removes the content of the 'filteredData' div

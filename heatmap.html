@@ -243,7 +243,7 @@ const btn = document.querySelector(".navbtn");
   <div class="details">
   <div class="paragraph">
     <h2>Heatmap Chart</h2>
-    <h1>Monthly Wages of Various Country</h1>
+    <h1>Wages of Various Country</h1>
     <p>
       Employment constitutes a fundamental aspect of our human livelihoods and existence and it serves as the bedrock for maintaining our basic living conditions. 
       Importantly, salary level significantly influences the overall quality of life, impacting not only our personal well-being but also shaping the circumstances 
@@ -455,7 +455,7 @@ var myColor10 = d3.scaleLinear()
     tooltip
       .html("<b><h3>" + d.country_name + 
       "</h3></b><br> Country code: " + d.country_code + "<br>Year: " + d.year + 
-      "<br>Monthly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hour_wages)
+      "<br>Monthly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hourly_wages)
       .style("left", (d3.mouse(this)[0]+70) + "px")
       .style("top", (d3.mouse(this)[1]) + "px");
   }
@@ -624,7 +624,7 @@ function displayMonthlyWagesTable(filteredData) {
   // Create table headers
   var headers = table.append("thead").append("tr");
   headers.selectAll("th")
-    .data(["Counrty Name", "Year", "Monthly Wages"])
+    .data(["Counrty Name", "Year", "Monthly Wages", "Hourly Wages"])
     .enter().append("th")
     .text(function(d) { return d; });
   
@@ -636,7 +636,7 @@ function displayMonthlyWagesTable(filteredData) {
   
   // Populate table cells
   rows.selectAll("td")
-    .data(function(d) { return [d.country_name, d.year, d.monthly_wages]; })
+    .data(function(d) { return [d.country_name, d.year, d.monthly_wages, d.hourly_wages]; })
     .enter().append("td")
     .text(function(d) { return d; });
 }
