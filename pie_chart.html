@@ -40,22 +40,23 @@
 
 .left {
     margin: auto;
-    width: 75%;
+    width: 70%;
     height: 100%;
     float: left;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: azure;
+    background-color: #4f9696;
 }
 
 .right {
-    width: 15%;
+    width: 30%;
     height: 100%;
     float: left;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #b88139;
 }
 
 
@@ -103,23 +104,23 @@ const btn = document.querySelector(".navbtn");
   })
 </script>
 
+
 <div class="all">
   <div class="left">
       <div id="chart"></div>
-      <div id="tooltip" class="tooltip">
-          <div id="info" class="info"></div>
+
+      <div id="tooltip" class="tooltip"></div>
       </div>
-  </div>
 
   <div class="right">
-      <div id="legend"></div>
+    
   </div>
-</div> 
+  </div>
 
 <script>
 
-var width = 1200,
-    height = 700,
+var width = 1000,
+    height = 650,
     radius = Math.min(width, height) / 2;
 
 var color = d3.scale.ordinal()
@@ -140,9 +141,7 @@ var svg = d3.select("#chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
+var tooltip = d3.select("#tooltip")
     .style("opacity", 0);
 
 d3.csv("migration_reason.csv", function(error, data) {
@@ -159,8 +158,8 @@ d3.csv("migration_reason.csv", function(error, data) {
           .duration(200)
           .style("opacity", .9);
         tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Male: " + d.data.male)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY - 28) + "px");
+          .style("left", (d3.event.pageX +20) + "px")
+          .style("top", (d3.event.pageY - 28) + "px")
       })
       .on("mouseout", function(d) {
         tooltip.transition()
