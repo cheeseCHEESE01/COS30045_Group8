@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        
+        <style>
+            .axis text { font-size: 12px }
+            
+            .legend text { font-size: 14px }
+        </style>
+    </head>
+    
+    <body>
+        <script>
+        const margin = { top: 20, right: 172, bottom: 102, left: 40 }
+        const width = 1000 - margin.left - margin.right
+        const height = 600 - margin.top - margin.bottom
+        
+        const svg = d3.select("body")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        
+        const color = d3.scaleOrdinal()
+        .range(["#1F77B4", "#FF7F0E", "#2CA02C", "#D62728"])
+        
+        d3.csv("health.csv").then(function (data) {
+            const stack1 = d3.stack()
+            .keys(["male_less_than_40_years", "female_less_than_40_years"])
+            .order(d3.stackOrderNone)
+            .offset(d3.stackOffsetNone)
+            
+            const stackedData1 = stack1(data)
+            
+            const stack2 = d3.stack()
+            .keys(["male_more_than_40_years", "female_more_than_40_years"])
+            .order(d3.stackOrderNone)
+            .offset(d3.stackOffsetNone)
+            
+            const stackedData2 = stack2(data)
+            
+            const xScale = d3.scaleBand()
+            .domain(data.map(d => d.disease_category))
+            .range([0, width])
+            .padding(0.08)
+            
+            const yScale = d3.scaleLinear()
+            .domain([0, d3.max([...stackedData1.flat(), ...stackedData2.flat()], d => d[1])])
+            .range([height, 0])
+            
+            svg.selectAll(".bar1")
+            .data(stackedData1)
+            .enter()
+            .append("g")
+            .attr("class", "bar1")
+            .attr("fill", d => color(d.key))
+            .selectAll("rect")
+            .data(d => d)
+            .enter()
+            .append("rect")
+            .attr("x", d => xScale(d.data.disease_category))
+            .attr("y", d => yScale(d[1]))
+            .attr("height", d => yScale(d[0]) - yScale(d[1]))
+            .attr("width", xScale.bandwidth() / 2)
+            .append("title")
+            .text(d => `${ d.data.disease_category } - ${ d[1] - d[0] }`)
+            
+            svg.selectAll(".bar2")
+            .data(stackedData2)
+            .enter()
+            .append("g")
+            .attr("class", "bar2")
+            .attr("fill", d => color(d.key))
+            .selectAll("rect")
+            .data(d => d)
+            .enter()
+            .append("rect")
+            .attr("x", d => xScale(d.data.disease_category) + xScale.bandwidth() / 2)
+            .attr("y", d => yScale(d[1]))
+            .attr("height", d => yScale(d[0]) - yScale(d[1]))
+            .attr("width", xScale.bandwidth() / 2)
+            .append("title")
+            .text(d => `${ d.data.disease_category } - ${ d[1] - d[0] }`)
+            
+            svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale))
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-0.8em")
+            .attr("dy", "0.48em")
+            .attr("transform", "rotate(-45)")
+            .style("font-size", "12px")
+            
+            svg.append("g")
+            .call(d3.axisLeft(yScale))
+            .style("font-size", "12px")
+            
+            const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate(" + (width + 40) + "," + (margin.top + 10) + ")")
+            
+            const legendColors = color.domain()
+            
+            const legendSpacing = 40
+            
+            const legendText = {
+                "male_less_than_40_years": "Male < 40 Years",
+                "female_less_than_40_years": "Female < 40 Years",
+                "male_more_than_40_years": "Male > 40 Years",
+                "female_more_than_40_years": "Female > 40 Years"
+            }
+            
+            const legendItems = legend.selectAll(".legend-item")
+            .data(legendColors)
+            .enter().append("g")
+            .attr("class", "legend-item")
+            .attr("transform", (d, i) => "translate(0," + (i * legendSpacing) + ")")
+            
+            legendItems.append("rect")
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", d => color(d))
+            
+            legendItems.append("text")
+            .attr("x", 28)
+            .attr("y", 8)
+            .attr("dy", ".40em")
+            .style("text-anchor", "start")
+            .style("font-size", "14px")
+            .text(d => legendText[d])
+        })
+        </script>
+    </body>
+</html>
