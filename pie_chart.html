@@ -35,13 +35,13 @@
 
 .left {
     margin: auto;
-    width: 70%;
+    width: 65%;
     height: 100%;
     float: left;
 }
 
 .right {
-    width: 30%;
+    width: 35%;
     height: 100%;
     float: left;
     display: flex;
@@ -78,7 +78,7 @@ label {
 }
 
 form {
-  width: 80%;
+  width: 100%;
   height: auto;
 }
 
@@ -116,6 +116,26 @@ button:hover {
   stroke-width: 3px; 
   stroke: #382813; 
 }
+
+.legend {
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  font-size: 17px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+  }
+
+  .legend-color {
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
+    border-radius: 50%;
+  }
 
 
 </style>
@@ -165,6 +185,7 @@ const btn = document.querySelector(".navbtn");
       
       <br><br>
       <button type="button" onclick="updateChart()">Update Chart</button>
+      <div id="legend"></div>
     </form>
 
   </div>
@@ -197,7 +218,7 @@ var svg = d3.select("#chart").append("svg")
 var tooltip = d3.select("#tooltip")
     .style("opacity", 0);
 
-d3.csv("migration_reason.csv", function(error, data) {
+d3.csv("reason.csv", function(error, data) {
   data.forEach(function(d) {
     d.male = +d.male;
   });
@@ -210,7 +231,7 @@ d3.csv("migration_reason.csv", function(error, data) {
         tooltip.transition()
           .duration(200)
           .style("opacity", .9);
-        tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Male: " + d.data.male)
+        tooltip.html("Reason: " + d.data.reason_for_migration + "<br/>" + "Male: " + d.data.male)
           .style("left", (d3.event.pageX +20) + "px")
           .style("top", (d3.event.pageY - 28) + "px")
       })
@@ -223,12 +244,31 @@ d3.csv("migration_reason.csv", function(error, data) {
   g.append("path")
       .attr("d", arc)
       .style("fill", function(d) { return color(d.data.reason_for_migration); });
-});
+
+
+// Create the legend
+var legend = d3.select("#legend")
+        .append("div")
+        .attr("class", "legend");
+
+      var legendItems = legend.selectAll(".legend-item")
+        .data(color.domain())
+        .enter().append("div")
+        .attr("class", "legend-item");
+
+      legendItems.append("div")
+        .attr("class", "legend-color")
+        .style("background-color", function (d) { return color(d); });
+
+      legendItems.append("div")
+        .text(function (d) { return d; });
+    });
+
 
 function updateChart() {
       var selectedGender = document.querySelector('input[name="gender"]:checked').value;
 
-      d3.csv("migration_reason.csv", function (error, data) {
+      d3.csv("reason.csv", function (error, data) {
         if (error) throw error;
 
         data.forEach(function (d) {
@@ -274,7 +314,7 @@ function updateChart() {
           tooltip.transition()
             .duration(200)
             .style("opacity", .9);
-          tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Value: " + d.data.value)
+          tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Percentage: " + d.data.value)
             .style("left", (d3.event.pageX + 20) + "px")
             .style("top", (d3.event.pageY - 28) + "px");
         })
