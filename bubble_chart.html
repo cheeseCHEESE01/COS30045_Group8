@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         
         <script src="https://d3js.org/d3.v5.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="nav.css" />
         
         <style>
         .tooltip {
@@ -19,6 +21,29 @@
     </head>
     
     <body>
+        <div class="sidenav">
+            <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
+        
+            <div class="items">
+                <ul>
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="choropleth_map.html">Unemployement</a></li>
+                  <li><a href="heatmap.html">Wages</a></li>
+                  <li><a href="sunburst.html">Population</a></li>
+                  <li><a href="pie_chart.html">Reason</a></li>
+                  <li><a href="clustered_stacked_bar_chart.html">Disease</a></li>
+                  <li><a href="bubble_chart.html">Immigration</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <script>
+          const btn = document.querySelector(".navbtn");
+            btn.addEventListener("click",()=>{
+            document.body.classList.toggle("active")
+            })
+        </script>
+
         <div>
             <label for="filterInput">Minimum Immigrant Population:</label>
             
