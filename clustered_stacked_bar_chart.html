@@ -6,15 +6,17 @@
         <script src="https://d3js.org/d3.v5.min.js"></script>
         
         <style>
-            .axis text { font-size: 12px }
+            .axis text { font-size : 12px }
             
-            .legend text { font-size: 14px }
+            .legend text { font-size : 14px }
         </style>
     </head>
     
     <body>
         <script>
-        const margin = { top: 20, right: 172, bottom: 102, left: 40 }
+        const selectedChartType = "stacked"
+        
+        const margin = { top : 20, right : 160, bottom : 102, left : 40 }
         const width = 1000 - margin.left - margin.right
         const height = 600 - margin.top - margin.bottom
         
@@ -26,22 +28,15 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         
         const color = d3.scaleOrdinal()
-        .range(["#1F77B4", "#FF7F0E", "#2CA02C", "#D62728"])
+        .range(["#1F77B4", "#FF7F0E"])
         
         d3.csv("health.csv").then(function (data) {
-            const stack1 = d3.stack()
-            .keys(["male_less_than_40_years", "female_less_than_40_years"])
+            const stack = d3.stack()
+            .keys(selectedChartType === "stacked" ? ["male_less_than_40_years", "male_more_than_39_years"] : ["male_less_than_40_years", "male_more_than_39_years"])
             .order(d3.stackOrderNone)
             .offset(d3.stackOffsetNone)
             
-            const stackedData1 = stack1(data)
-            
-            const stack2 = d3.stack()
-            .keys(["male_more_than_40_years", "female_more_than_40_years"])
-            .order(d3.stackOrderNone)
-            .offset(d3.stackOffsetNone)
-            
-            const stackedData2 = stack2(data)
+            const stackedData = stack(data)
             
             const xScale = d3.scaleBand()
             .domain(data.map(d => d.disease_category))
@@ -49,14 +44,33 @@
             .padding(0.08)
             
             const yScale = d3.scaleLinear()
-            .domain([0, d3.max([...stackedData1.flat(), ...stackedData2.flat()], d => d[1])])
+            .domain([0, d3.max(stackedData[stackedData.length - 1], d => d[1])])
             .range([height, 0])
             
-            svg.selectAll(".bar1")
-            .data(stackedData1)
+            const focus = (category) => {
+                svg.selectAll(".bar rect")
+                .style("opacity", d => (category === d.data.disease_category) ? 1 : 0.4)
+                .style("filter", d => (category === d.data.disease_category) ? "none" : "url(#blur)")
+            }
+            
+            const blur = () => {
+                svg.selectAll(".bar rect")
+                .style("opacity", 1)
+                .style("filter", "none")
+            }
+            
+            const defs = svg.append("defs")
+            
+            const filter = defs.append("filter")
+            .attr("id", "blur")
+            .append("feGaussianBlur")
+            .attr("stdDeviation", 0)
+            
+            svg.selectAll(".bar")
+            .data(stackedData)
             .enter()
             .append("g")
-            .attr("class", "bar1")
+            .attr("class", "bar")
             .attr("fill", d => color(d.key))
             .selectAll("rect")
             .data(d => d)
@@ -65,24 +79,9 @@
             .attr("x", d => xScale(d.data.disease_category))
             .attr("y", d => yScale(d[1]))
             .attr("height", d => yScale(d[0]) - yScale(d[1]))
-            .attr("width", xScale.bandwidth() / 2)
-            .append("title")
-            .text(d => `${ d.data.disease_category } - ${ d[1] - d[0] }`)
-            
-            svg.selectAll(".bar2")
-            .data(stackedData2)
-            .enter()
-            .append("g")
-            .attr("class", "bar2")
-            .attr("fill", d => color(d.key))
-            .selectAll("rect")
-            .data(d => d)
-            .enter()
-            .append("rect")
-            .attr("x", d => xScale(d.data.disease_category) + xScale.bandwidth() / 2)
-            .attr("y", d => yScale(d[1]))
-            .attr("height", d => yScale(d[0]) - yScale(d[1]))
-            .attr("width", xScale.bandwidth() / 2)
+            .attr("width", xScale.bandwidth())
+            .on("mouseover", d => focus(d.data.disease_category))
+            .on("mouseout", blur)
             .append("title")
             .text(d => `${ d.data.disease_category } - ${ d[1] - d[0] }`)
             
@@ -108,16 +107,12 @@
             
             const legendSpacing = 40
             
-            const legendText = {
-                "male_less_than_40_years": "Male < 40 Years",
-                "female_less_than_40_years": "Female < 40 Years",
-                "male_more_than_40_years": "Male > 40 Years",
-                "female_more_than_40_years": "Female > 40 Years"
-            }
+            const legendText = { "male_less_than_40_years" : "Male < 40 Years", "male_more_than_39_years" : "Male > 39 Years" }
             
             const legendItems = legend.selectAll(".legend-item")
             .data(legendColors)
-            .enter().append("g")
+            .enter()
+            .append("g")
             .attr("class", "legend-item")
             .attr("transform", (d, i) => "translate(0," + (i * legendSpacing) + ")")
             
@@ -135,5 +130,11 @@
             .text(d => legendText[d])
         })
         </script>
+        
+        <h1>Frequency of Health Problem Among Migrant Adult (14 - 65 Years) in Southern India - 2013</h1>
+        
+        <p>According to the household survey, some migrant have health problem. The chart provide an overview of all the health event experienced by adult in this study and compare the prevalence of these health event among migrant individual. We can see that male migrant over the age of 39 are more likely to have connective tissue problem than male migrant under the age of 40. For example, back pain, chest pain, and joint pain. Secondly, we can see that male migrant population over 39 years old is more likely to have circulatory/respiratory problem than male migrant population under 40 years old. Overall, male migrant over 39 years of age have the highest incidence of the disease compared to those under 40 years of age.</p>
+        
+        <p>Dataset: https://www.researchgate.net/publication/319659904_Determinants_of_internal_migrant_health_and_the_healthy_migrant_effect_in_South_India_A_mixed_methods_study (modify by group 8)</p>
     </body>
 </html>
