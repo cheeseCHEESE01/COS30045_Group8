@@ -133,14 +133,22 @@ p {
 }
 
 .RH {
+  padding: 50px 0;
   width: 20%;
   float: right;
   height: 100%;
 }
 
+.MWR {
+  margin-top: 50px;
+  width: 100%;
+  text-decoration: underline;
+  color: #000;
+}
+
 #legend {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   align-items: center;
 }
@@ -249,7 +257,7 @@ const btn = document.querySelector(".navbtn");
   <div class="details">
   <div class="paragraph">
     <h2>Heatmap Chart</h2>
-    <h1>Wages of Various Country</h1>
+    <h1>Wages of Various Countries</h1>
     <p>
       Employment constitutes a fundamental aspect of our human livelihoods and existence and it serves as the bedrock for maintaining our basic living conditions. 
       Importantly, salary level significantly influences the overall quality of life, impacting not only our personal well-being but also shaping the circumstances 
@@ -290,6 +298,7 @@ const btn = document.querySelector(".navbtn");
   </div>
 
   <div class="RH">
+    <p class="MWR">Monthly Wages Range</p>
     <div id="legend"></div>
   </div>
 </div>
@@ -467,7 +476,7 @@ var myColor10 = d3.scaleLinear()
     tooltip
       .html("<b><h3>" + d.country_name + 
       "</h3></b><br> Country code: " + d.country_code + "<br>Year: " + d.year + 
-      "<br>Monthly wages: " + d.monthly_wages + "<br>Hour wages: " + d.hourly_wages)
+      "<br>Monthly wages: " + d.monthly_wages + "<br>Hourly wages: " + d.hourly_wages)
       .style("left", (d3.mouse(this)[0]+70) + "px")
       .style("top", (d3.mouse(this)[1]) + "px");
   }
