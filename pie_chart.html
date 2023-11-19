@@ -16,11 +16,6 @@
     font: 10px sans-serif;
   }
 
-  .arc path {
-    stroke: #fff;
-    cursor: pointer;
-  }
-
   .tooltip {
     position: absolute;
     text-align: center;
@@ -35,7 +30,7 @@
 
   .all {
     width: 100%;
-    height: 700px;
+    height: 800px;
 }
 
 .left {
@@ -43,10 +38,6 @@
     width: 70%;
     height: 100%;
     float: left;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #4f9696;
 }
 
 .right {
@@ -56,14 +47,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #b88139;
 }
 
 
 #chart {
-    max-width: 800px;
-    margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Adjust the width as needed */
+  height: 100%; /* Adjust the height as needed */
 }
+
 
 .info {
     color: black;
@@ -77,6 +71,53 @@
     font-size: 18px;
     text-decoration: underline; 
 }
+
+label {
+  font-size: 20px;
+  order: 1;
+}
+
+form {
+  width: 80%;
+  height: auto;
+}
+
+input {
+  float: left;
+  margin-top: 3px;
+  transform: scale(1.5);
+  margin-right: 20px;
+}
+
+button {
+  width: 180px;
+  height: 50px;
+  font-size: 17px;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #6d655b;
+  border: none;
+}
+
+button:hover {
+  color: #cbc3b7;
+  background-color: #6d655b;
+}
+
+.arc path {
+    stroke: #fff;
+    cursor: pointer;
+    margin: 30px;
+  }
+
+  .arc:hover {
+  transform: scale(1.1); /* Adjust the scale factor as needed */
+  transition: transform 0.2s ease; /* Add a smooth transition effect */
+  stroke-width: 3px; 
+  stroke: #382813; 
+}
+
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -106,8 +147,9 @@ const btn = document.querySelector(".navbtn");
 
 
 <div class="all">
+  <p>lalalalala</p>
   <div class="left">
-      <div id="chart"></div>
+      <div id="chart" class="chart"></div>
 
       <div id="tooltip" class="tooltip"></div>
       </div>
@@ -117,9 +159,11 @@ const btn = document.querySelector(".navbtn");
       <label for="male">Male</label>
       <input type="radio" id="male" name="gender" value="male" checked>
 
+      <br><br>
       <label for="female">Female</label>
       <input type="radio" id="female" name="gender" value="female">
-
+      
+      <br><br>
       <button type="button" onclick="updateChart()">Update Chart</button>
     </form>
 
@@ -128,9 +172,9 @@ const btn = document.querySelector(".navbtn");
 
 <script>
 
-var width = 1000,
-    height = 650,
-    radius = Math.min(width, height) / 2;
+var width = 900,
+    height = 800,
+    radius = Math.min(800, 700) / 2;
 
 var color = d3.scale.ordinal()
     .range(["#E6B0AA", "#AF7AC5", "#5DADE2", "#48C9B0", "#ABEBC6", "#F7DC6F", "#DC7633", "#979A9A", "#5D6D7E", "#4A235A", "#2874A6", "#CD4639", "#FFA7F7", "#D2E559"]);
@@ -147,8 +191,8 @@ var pie = d3.layout.pie()
 var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .append("g");
+
 
 var tooltip = d3.select("#tooltip")
     .style("opacity", 0);
@@ -216,7 +260,8 @@ function updateChart() {
       svg.selectAll("*").remove();
 
       var chartGroup = svg.append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      .attr("transform", "translate(" + (width / 2 + 0) + "," + (height / 2 + 100) + ")");
+
 
       var tooltip = d3.select("#tooltip")
         .style("opacity", 0);
