@@ -3,100 +3,96 @@
     <head>
         <meta charset="UTF-8">
         
-        <script src="https://d3js.org/d3.v5.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-        <link rel="stylesheet" href="nav.css" />
+        
+        <link rel="stylesheet" href="nav.css">
+        
+        <script src="https://d3js.org/d3.v5.min.js"></script>
         
         <style>
-            .axis text { font-size : 12px }
-            
-            .legend text { font-size : 14px }
-
-            h1 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; margin-bottom: 30px; }
-
-
-h2 { color: #7c795d; font-family: 'Source Sans Pro', sans-serif; font-size: 28px; font-weight: 400; line-height: 32px; margin: 0 0 24px; }
-
-
-p { color: #4c4a37; font-family: 'Source Sans Pro', sans-serif; font-size: 18px; line-height: 32px; margin: 0 0 24px; text-align: justify; }
-
-
-.data a { color: #ff9900; background: #fff4a3; text-decoration: none; }
-
-
-a:hover { color: #ffcc66 }
-
-.title {
-    width: 100%;
-    height: auto;
-    background-color: #ffcc66;
-    padding: 100px 0;
-}
-
-.info {
-    background-color: #e1ddbf;
-    width: 80%;
-    margin: auto;
-    padding: 50px;
-}
-
-.c-b {
-    width: 100%;
-    height: auto;
-    background-color: #ffcc6688;
-}
-
-
+        h1 {
+            color : #DA8067;
+            font-family : sans-serif;
+            font-size : 48px;
+            margin-bottom : 40px
+        }
+        
+        p {
+            font-family : sans-serif;
+            font-size : 18px;
+            line-height : 32px;
+            text-align : justify
+        }
+        
+        a:hover { color : #DA8067 }
+        
+        .axis text { font-size : 12px }
+        
+        .chart-background { background-color : #EBAF81 }
+        
+        .inner-background {
+            background-color : #F7E39C;
+            margin : auto;
+            padding : 100px;
+            width : auto
+        }
+        
+        .legend text { font-size : 14px }
+        
+        .outer-background {
+            background-color : #F7FFBA;
+            padding : 100px;
+            width : auto
+        }
         </style>
     </head>
     
     <body>
-
         <div class="sidenav">
-            <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
-        
+            <span class="navbtn" href=" "><i class="fa fa-navicon"></i></span>
+            
             <div class="items">
                 <ul>
-                  <li><a href="index.html">Home</a></li>
-                  <li><a href="choropleth_map.html">Unemployement</a></li>
-                  <li><a href="heatmap.html">Wages</a></li>
-                  <li><a href="sunburst.html">Population</a></li>
-                  <li><a href="pie_chart.html">Reason</a></li>
-                  <li><a href="clustered_stacked_bar_chart.html">Disease</a></li>
-                  <li><a href="bubble_chart.html">Immigration</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="choropleth_map.html">Unemployement</a></li>
+                    <li><a href="heatmap.html">Wages</a></li>
+                    <li><a href="sunburst.html">Population</a></li>
+                    <li><a href="pie_chart.html">Reason</a></li>
+                    <li><a href="clustered_stacked_bar_chart.html">Disease</a></li>
+                    <li><a href="bubble_chart.html">Immigration</a></li>
                 </ul>
             </div>
         </div>
         
         <script>
-          const btn = document.querySelector(".navbtn");
-            btn.addEventListener("click",()=>{
-            document.body.classList.toggle("active")
-            })
+        const btn = document.querySelector(".navbtn")
+        btn.addEventListener("click", () => { document.body.classList.toggle("active") })
         </script>
-
-        <div class="title">
-            <div class="info">
-            <h1>Frequency of Health Problem Among Migrant Adult (14 - 65 Years) in Southern India - 2013</h1>
         
-            <p>According to the household survey, some migrant have health problem. The chart provide an overview of all the health event experienced by adult in this study and compare the prevalence of these health event among migrant individual. We can see that male migrant over the age of 39 are more likely to have connective tissue problem than male migrant under the age of 40. For example, back pain, chest pain, and joint pain. Secondly, we can see that male migrant population over 39 years old is more likely to have circulatory/respiratory problem than male migrant population under 40 years old. Overall, male migrant over 39 years of age have the highest incidence of the disease compared to those under 40 years of age.</p>
-
-            <p>Dataset: 
-            <a class="data" href="https://www.researchgate.net/publication/319659904_Determinants_of_internal_migrant_health_and_the_healthy_migrant_effect_in_South_India_A_mixed_methods_study">Data Resources</a>
+        <div class="outer-background">
+            <div class="inner-background">
+                <h1>Frequency of Health Problem Among Migrant Adult (14 - 65 Years) in Southern India - 2013</h1>
                 
-                (modify by group 8)</p>
-
-                <div class="c-b">
+                <p>According to the household survey, some migrant have health problem. The chart provide an overview of all the health event experienced by adult in this study and compare the prevalence of these health event among migrant individual. We can see that male migrant over the age of 39 are more likely to have connective tissue problem than male migrant under the age of 40. For example, back pain, chest pain, and joint pain. Secondly, we can see that male migrant population over 39 years old is more likely to have circulatory/respiratory problem than male migrant population under 40 years old. Overall, male migrant over 39 years of age have the highest incidence of the disease compared to those under 40 years of age.</p>
+                
+                <br>
+                
+                <p>Dataset Modify By Group 8:
+                    <a class="data" href="https://www.researchgate.net/publication/319659904_Determinants_of_internal_migrant_health_and_the_healthy_migrant_effect_in_South_India_A_mixed_methods_study">Data Resource</a>
+                </p>
+                
+                <br>
+                
+                <div class="chart-background">
                     <div id="chart"></div>
                 </div>
+            </div>
         </div>
-        </div>
-
+        
         <script>
         const selectedChartType = "stacked"
         
-        const margin = { top : 50, right : 200, bottom : 120, left : 100 }
+        const margin = { top : 80, right : 160, bottom : 160, left : 80 }
         const width = 1000 - margin.left - margin.right
         const height = 600 - margin.top - margin.bottom
         
@@ -163,7 +159,7 @@ a:hover { color: #ffcc66 }
             .on("mouseover", d => focus(d.data.disease_category))
             .on("mouseout", blur)
             .append("title")
-            .text(d => `${ d.data.disease_category } - ${ d[1] - d[0] }`)
+            .text(d => `${ d.data.disease_category} - ${ d[1] - d[0] }`)
             
             svg.append("g")
             .attr("transform", "translate(0," + height + ")")
