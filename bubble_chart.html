@@ -3,59 +3,109 @@
     <head>
         <meta charset="UTF-8">
         
-        <script src="https://d3js.org/d3.v5.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="nav.css" />
+        
+        <link rel="stylesheet" href="nav.css">
+        
+        <script src="https://d3js.org/d3.v5.min.js"></script>
         
         <style>
+        h1 {
+            color : #DA8067;
+            font-family : sans-serif;
+            font-size : 48px;
+            margin-bottom : 40px
+        }
+        
+        p {
+            font-family : sans-serif;
+            font-size : 18px;
+            line-height : 32px;
+            text-align : justify
+        }
+        
+        a:hover { color : #DA8067 }
+        
+        .chart-background { background-color : #EBAF81 }
+        
+        .inner-background {
+            background-color : #F7E39C;
+            margin : auto;
+            padding : 100px;
+            width : auto
+        }
+        
+        .outer-background {
+            background-color : #F7FFBA;
+            padding : 100px;
+            width : auto
+        }
+        
         .tooltip {
-            background-color: white;
-            border: 2px solid black;
-            border-radius: 10px;
-            opacity: 0;
-            padding: 10px;
-            pointer-events: none;
-            position: absolute;
+            background-color : white;
+            border : 2px solid black;
+            border-radius : 10px;
+            padding : 10px;
+            pointer-events : none;
+            position : absolute
         }
         </style>
     </head>
     
     <body>
         <div class="sidenav">
-            <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
-        
+            <span class="navbtn" href=" "><i class="fa fa-navicon"></i></span>
+            
             <div class="items">
                 <ul>
-                  <li><a href="index.html">Home</a></li>
-                  <li><a href="choropleth_map.html">Unemployement</a></li>
-                  <li><a href="heatmap.html">Wages</a></li>
-                  <li><a href="sunburst.html">Population</a></li>
-                  <li><a href="pie_chart.html">Reason</a></li>
-                  <li><a href="clustered_stacked_bar_chart.html">Disease</a></li>
-                  <li><a href="bubble_chart.html">Immigration</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="choropleth_map.html">Unemployement</a></li>
+                    <li><a href="heatmap.html">Wages</a></li>
+                    <li><a href="sunburst.html">Population</a></li>
+                    <li><a href="pie_chart.html">Reason</a></li>
+                    <li><a href="clustered_stacked_bar_chart.html">Disease</a></li>
+                    <li><a href="bubble_chart.html">Immigration</a></li>
                 </ul>
             </div>
         </div>
         
         <script>
-          const btn = document.querySelector(".navbtn");
-            btn.addEventListener("click",()=>{
-            document.body.classList.toggle("active")
-            })
+        const btn = document.querySelector(".navbtn")
+        btn.addEventListener("click", () => { document.body.classList.toggle("active") })
         </script>
-
-        <div>
-            <label for="filterInput">Minimum Immigrant Population:</label>
-            
-            <input type="number" id="filterInput" value="0">
-            
-            <button onclick="filterData()">Filter</button>
+        
+        <div class="outer-background">
+            <div class="inner-background">
+                <h1>Top Concentration of Indian Immigrant by U.S. Metropolitan Area - 2015 - 2019</h1>
+                
+                <p>The chart below directly show the metropolitan area where the Indian immigrant population lived from 2015 - 2019. The term "immigrant" refer to a person who reside in the United States but is not a U.S. citizen. The bubble represent the immigrant population from India and the size of the bubble reflect the percentage of the metro area population. Secondly, the filter function search for the minimum immigrant population from India and the chart update when user click the filter button.</p>
+                
+                <br>
+                
+                <p>Dataset Modify By Group 8:
+                    <a class="data" href="https://www.migrationpolicy.org/article/indian-immigrants-united-states">Data Resource</a>
+                </p>
+                
+                <br>
+                
+                <div class="chart-background">
+                    <div>
+                        <label for="filterInput">Minimum Immigrant Population from India:</label>
+                        
+                        <input type="number" id="filterInput" value="0">
+                        
+                        <button onclick="filterData()">Filter</button>
+                    </div>
+                    
+                    <div id="chart"></div>
+                </div>
+            </div>
         </div>
         
         <script>
         let originalData
         
-        d3.csv("immigrant.csv").then(function (data) {
+        d3.csv("immigrant.csv").then(function(data) {
             originalData = data
             
             updateChart(data)
@@ -65,11 +115,11 @@
             d3.select("svg")
             .remove()
             
-            const margin = { top: 28, right: 20, bottom: 70, left: 50 }
-            const width = 800 - margin.left - margin.right
+            const margin = { top : 40, right : 16, bottom : 80, left : 60 }
+            const width = 1000 - margin.left - margin.right
             const height = 600 - margin.top - margin.bottom
             
-            const svg = d3.select("body")
+            const svg = d3.select("#chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -123,11 +173,12 @@
             .force("collide", d3.forceCollide().radius(d => Math.sqrt(parseFloat(d.percentage_of_metro_area_population)) * 10 + 2))
             .stop()
             
-            for (let i = 0; i < 120; ++i) simulation.tick()
+            for(let i = 0; i < 120; ++i) simulation.tick()
             
             svg.selectAll("circle")
             .data(data)
-            .enter().append("circle")
+            .enter()
+            .append("circle")
             .attr("cx", d => d.x)
             .attr("cy", d => d.y)
             .attr("r", d => Math.sqrt(parseFloat(d.percentage_of_metro_area_population)) * 10)
@@ -135,20 +186,29 @@
             .style("stroke", "black")
             .style("stroke-width", 2)
             .on("mouseover", function (d) {
-                d3.select(this).style("fill", "coral")
-                svg.selectAll("circle:not(:hover)").style("fill", "#964B00")
+                d3.select(this)
+                .style("fill", "coral")
+                
+                svg.selectAll("circle:not(:hover)")
+                .style("fill", "#964B00")
+                
                 tooltip.transition()
                 .duration(200)
                 .style("opacity", .9)
-                tooltip.html(`<strong>${d.metropolitan_area}</strong><br/>Immigrant Population: ${d.immigrant_population_from_india}<br/>Percentage of Population: ${d.percentage_of_metro_area_population}`)
-                .style("left", (d3.event.pageX + 5) + "px")
+                
+                tooltip.html(`<strong>${ d.metropolitan_area }</strong><br>Immigrant Population from India: ${ d.immigrant_population_from_india }<br>Percentage of Metro Area Population: ${ d.percentage_of_metro_area_population }`)
+                .style("left", (d3.event.pageX + 4) + "px")
                 .style("top", (d3.event.pageY - 28) + "px")
             })
             .on("mouseout", function (d) {
-                d3.select(this).style("fill", d => colorScale(d.metropolitan_area))
-                svg.selectAll("circle").style("fill", d => colorScale(d.metropolitan_area))
+                d3.select(this)
+                .style("fill", d => colorScale(d.metropolitan_area))
+                
+                svg.selectAll("circle")
+                .style("fill", d => colorScale(d.metropolitan_area))
+                
                 tooltip.transition()
-                .duration(500)
+                .duration(400)
                 .style("opacity", 0)
             })
         }
