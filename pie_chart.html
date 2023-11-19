@@ -113,7 +113,16 @@ const btn = document.querySelector(".navbtn");
       </div>
 
   <div class="right">
-    
+    <form id="genderForm">
+      <label for="male">Male</label>
+      <input type="radio" id="male" name="gender" value="male" checked>
+
+      <label for="female">Female</label>
+      <input type="radio" id="female" name="gender" value="female">
+
+      <button type="button" onclick="updateChart()">Update Chart</button>
+    </form>
+
   </div>
   </div>
 
@@ -171,6 +180,73 @@ d3.csv("migration_reason.csv", function(error, data) {
       .attr("d", arc)
       .style("fill", function(d) { return color(d.data.reason_for_migration); });
 });
+
+function updateChart() {
+      var selectedGender = document.querySelector('input[name="gender"]:checked').value;
+
+      d3.csv("migration_reason.csv", function (error, data) {
+        if (error) throw error;
+
+        data.forEach(function (d) {
+          d.value = +d[selectedGender];
+        });
+
+        updateChartWithData(data);
+      });
+    }
+
+    function updateChartWithData(data) {
+      var width = 1000,
+        height = 650,
+        radius = Math.min(width, height) / 2;
+
+      var color = d3.scale.ordinal()
+        .range(["#E6B0AA", "#AF7AC5", "#5DADE2", "#48C9B0", "#ABEBC6", "#F7DC6F", "#DC7633", "#979A9A", "#5D6D7E", "#4A235A", "#2874A6", "#CD4639", "#FFA7F7", "#D2E559"]);
+
+      var arc = d3.svg.arc()
+        .outerRadius(radius - 250)
+        .innerRadius(radius - 10);
+
+      var pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) { return d.value; });
+
+      var svg = d3.select("#chart").select("svg");
+
+      svg.selectAll("*").remove();
+
+      var chartGroup = svg.append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+      var tooltip = d3.select("#tooltip")
+        .style("opacity", 0);
+
+      var g = chartGroup.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc")
+        .on("mouseover", function (d) {
+          tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+          tooltip.html("Reason For Migration: " + d.data.reason_for_migration + "<br/>" + "Value: " + d.data.value)
+            .style("left", (d3.event.pageX + 20) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+          tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+        });
+
+      g.append("path")
+        .attr("d", arc)
+        .style("fill", function (d) { return color(d.data.reason_for_migration); });
+    }
+
+    // Initial chart rendering (load male data by default)
+    updateChart();
+
 
 </script>
 </body>

@@ -1,15 +1,15 @@
-reason_for_migration,male,female,person
-in search of employment/better employment,22.8,0.6,4.8
-for employment/ work (to take up employment/ to take up better employment/ business/ proximity to place of work/ transfer),20.1,0.7,4.4
-loss of job/closure of unit/lack of employment opportunities,6.7,0.4,1.6
-migration of parent/earning member of the family,17.5,7.3,9.2
-to pursue studies,4.7,0.6,1.4
-marriage,6.2,86.8,71.6
-"natural disaster (drought, flood, tsunami, etc)",0.6,0.1,0.2
-"social / political problems (riots, terrorism, political refugee, bad law and order, etc.)",0.6,0.1,0.2
-displacement by development project,0.4,0.1,0.2
-health related reasons,2.5,0.3,0.7
-acquisition of own house/ flat..,3.2,0.5,1
-housing problems,4.8,0.8,1.5
-post retirement,1.6,0.1,0.4
-others,8.4,1.7,3
+reason_for_migration,male,female
+in search of employment/better employment,22.8,0.6
+for employment/ work (to take up employment/ to take up better employment/ business/ proximity to place of work/ transfer),20.1,0.7
+loss of job/closure of unit/lack of employment opportunities,6.7,0.4
+migration of parent/earning member of the family,17.5,7.3
+to pursue studies,4.7,0.6
+marriage,6.2,86.8
+"natural disaster (drought, flood, tsunami, etc)",0.6,0.1
+"social / political problems (riots, terrorism, political refugee, bad law and order, etc.)",0.6,0.1
+displacement by development project,0.4,0.1
+health related reasons,2.5,0.3
+acquisition of own house/ flat..,3.2,0.5
+housing problems,4.8,0.8
+post retirement,1.6,0.1
+others,8.4,1.7
