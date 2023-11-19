@@ -210,6 +210,12 @@ tr:hover {
   color: #000;
 }
 
+
+.data { color: #ffffff; text-decoration: none; text-align: right; font-size: 18px; }
+
+
+.data:hover { color: #d7e6f1; text-decoration: underline;}
+
 </style>
 <body>
 <!-- Load d3.js -->
@@ -271,7 +277,13 @@ const btn = document.querySelector(".navbtn");
     <p class="c-text">
       Below is the data visualization of the wages of various countries.
       Monitoring wage changes across various countries provides valuable insights into the dynamics of compensation globally. This process allows us to discern subtle differences in pay structures from one country to another. The availability of disaggregated wage statistics facilitates the evaluation, observation, and analysis of these changes. This wealth of data enables people to grasp the economic status of different countries and assess their viability for immigration.
+    
+      <br><br>
+        <a class="data" href="https://www.nber.org/research/data/occupational-wages-around-world-oww-database">Data Source</a> | <a class="data" href="https://d3-graph-gallery.com/graph/heatmap_tooltip.html">References Code</a>
     </p>
+
+    
+    
     <div class="top">
   <div class="LH">
     <div id="my_dataviz"></div>
