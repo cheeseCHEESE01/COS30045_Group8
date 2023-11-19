@@ -300,7 +300,14 @@ function updateChart() {
       svg.selectAll("*").remove();
 
       var chartGroup = svg.append("g")
-      .attr("transform", "translate(" + (width / 2 + 0) + "," + (height / 2 + 100) + ")");
+        .attr("transform", "translate(" + (width / 2 + 0) + "," + (height / 2 + 100) + ")")
+        .style("opacity", 0);
+
+    chartGroup.transition()
+        .duration(1000)
+        .delay(300)
+        .style("opacity", 1)
+
 
 
       var tooltip = d3.select("#tooltip")
