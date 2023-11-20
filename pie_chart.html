@@ -117,18 +117,6 @@ button:hover {
   stroke: #382813; 
 }
 
-.back {
-  width: 100%;
-  height: auto; /* 100% of the viewport height */
-  position: relative;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Fix the background image when scrolling */
-  overflow: hidden; /* Hide overflow to prevent scrollbars */
-  background-image: url(https://images.template.net/101896/soft-cloud-background-vx3ho.jpg);
-}
-
 .legend {
   width: 100%;
   height: auto;
@@ -149,78 +137,11 @@ button:hover {
     border-radius: 50%;
   }
 
-  .rightbox{
-    margin-top: 100px;
-  }
-
-  .upbox {
-  width: 70%;
-  height: auto;
-  background-color: rgb(216, 210, 210);
-  margin: auto;
-  padding: 100px 150px;
-}
-
-
-h2 { 
-  font-family: 'Righteous', cursive; 
-  font-size: 30px; 
-  letter-spacing: 3px; 
-  color: #050505; 
-  text-transform: uppercase; 
-  text-shadow: 1px 1px 0 #000; 
-  margin: 10px 0 24px; 
-  text-align: center; 
-  line-height: 50px; 
-}
-
-
-
-h1 { 
-  color: #050505; 
-  text-shadow: 2px 2px 0 #fefefe; 
-  font-size: 65px; 
-  font-weight: normal; 
-  line-height: 60px; 
-  margin: 10px 0 0px 0; 
-  text-transform: uppercase; 
-  margin: 10px 0 24px; 
-  letter-spacing: 2px;
-  text-align: center; 
-}
-
-
-p { 
-  color: #050505; 
-  font-family: 'Verdana', sans-serif; 
-  font-size: 16px; 
-  line-height: 26px; 
-  text-indent: 30px; 
-  margin: 0; 
-}
-
-.data { 
-  color: #c08600; 
-  text-decoration: none; 
-  text-align: right; 
-  padding: 15px; 
-  font-size: 20px;
-  text-align: center;  
-}
-
-
-.data:hover { 
-  color: #070707; 
-  text-decoration: underline;
-  
-}
-
 
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
-<div class="back">
 <div class="sidenav">
   <span class="navbtn" href=""><i class="fa fa-navicon"></i></span>
 
@@ -244,49 +165,15 @@ const btn = document.querySelector(".navbtn");
   })
 </script>
 
-<div class ="title">
-<div class="upbox">
-  <h2>~ Pie Chart ~</h2>
-  <br><br>
-  <h1>Indian Migration Reasons</h1>
-  <br><br>
 
-  <p>
-    Indian migration is a complex phenomenon influenced by various factors, encompassing economic, educational, familial, and societal dimensions. Primarily, one of the key reasons Indians choose migration is the inadequacy of domestic economic opportunities. Given India's vast population, economic growth falls short of meeting everyone's employment needs, prompting many to seek broader economic prospects through immigration.
-  </p>
-<br><br>
-
-  <p>
-    Firstly, Indian immigrants gain broader opportunities on the international stage. By studying, working, or settling in other countries, Indians broaden their perspectives, exposing themselves to diverse cultures, social systems, and business models. This cross-cultural experience aids in developing a global outlook and enhances the cross-cultural communication skills required in the era of globalization.
-  </p>
-  <br><br>
-  <p>
-    Secondly, Indian immigrants often find improved career prospects and professional development abroad. In some developed countries, they have the chance to engage in high-tech, medical, scientific research, among other fields, earning higher salaries and gaining richer professional experience. This not only contributes to elevating individual career levels but also establishes a positive image of India in the global talent market. Not only that, the education is a significant benefit for Indian immigrants. Many Indians choose to study abroad, gaining access to advanced educational systems and research environments. This provides them with more extensive and higher-quality educational resources, contributing to the enhancement of individual academic proficiency and professional knowledge.
-  </p>
-  <br><br>
-  <p>
-    Simultaneously, Indian immigrants build extensive social networks in the international community. In their new places of residence, they establish connections with people of different nationalities, promoting cultural exchange, business collaboration, and academic cooperation. Such social networks are beneficial not only for individual career development but also for fostering friendly relations between India and other nations. Finally, Indian immigrants bring back international experience and professional skills to India. The knowledge and experience gained abroad contribute to upgrading domestic industries and fostering technological innovation. This knowledge transfer helps enhance India's competitiveness in the global economy and promotes sustainable development.
-  </p>
-  <br><br>
-  <p>
-    In conclusion, the benefits of Indian migration encompass various aspects, including individual career development, educational attainment, and international social interactions. This reciprocal interaction contributes to the collective prosperity of the global community and provides opportunities for India to play a more active role on the international stage.
-  </p>
-  <br><br>
-  <br><br>
-  <br><br>
-  <p>
-    <a class="data" href="https://pib.gov.in/PressReleasePage.aspx?PRID=1833854">Data Source</a> | <a class="data" href="https://phppot.com/javascript/chartjs-pie-chart/">References Code</a>
-  </p>
-
-</div></div>
-
+<div class="all">
+  <p>lalalalala</p>
   <div class="left">
       <div id="chart" class="chart"></div>
 
       <div id="tooltip" class="tooltip"></div>
       </div>
 
-  <div class="rightbox">
   <div class="right">
     <form id="genderForm">
       <label for="male">Male</label>
@@ -301,7 +188,9 @@ const btn = document.querySelector(".navbtn");
       <div id="legend"></div>
     </form>
 
-  </div></div></div>
+  </div>
+  </div>
+
 <script>
 
 var width = 900,
@@ -418,8 +307,6 @@ function updateChart() {
         .duration(1000)
         .delay(300)
         .style("opacity", 1)
-
-
 
       var tooltip = d3.select("#tooltip")
         .style("opacity", 0);
